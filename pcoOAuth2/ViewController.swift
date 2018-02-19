@@ -8,6 +8,10 @@
 
 import UIKit
 
+// 1
+import AeroGearHttp
+import AeroGearOAuth2
+
 class ViewController: UIViewController {
     
     override func viewDidLoad() {

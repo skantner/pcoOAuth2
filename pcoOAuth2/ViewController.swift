@@ -8,6 +8,12 @@
 
 import UIKit
 
+// PCO Client ID = 3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b
+// PCO Secret = 896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873
+
+// https://api.planningcenteronline.com/oauth/authorize
+// https://api.planningcenteronline.com/oauth/token
+// scope = services
 // 1
 import AeroGearHttp
 import AeroGearOAuth2
@@ -30,6 +36,9 @@ class ViewController: UIViewController {
     
     
     @IBAction func goPressed() {
+        
+        let config = Config(baseURL: "https://api.planningcenteronline.com/oauth/authorize",
+                            
         let url = iTunesURL(searchText: "Hillsong")
         print ("URL: '\(url)'")
         if let data = performStoreRequest(with: url) {

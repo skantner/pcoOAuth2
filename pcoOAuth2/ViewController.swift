@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     
     @IBAction func goPressed() {
         
-        let config = Config(baseURL: "https://api.planningcenteronline.com/oauth/authorize",
+  //      let config = Config(baseURL: "https://api.planningcenteronline.com/oauth/authorize",
                             
         let url = iTunesURL(searchText: "Hillsong")
         print ("URL: '\(url)'")

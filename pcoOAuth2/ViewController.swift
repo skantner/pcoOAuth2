@@ -37,14 +37,32 @@ class ViewController: UIViewController {
     
     @IBAction func goPressed() {
         
-  //      let config = Config(baseURL: "https://api.planningcenteronline.com/oauth/authorize",
-                            
-        let url = iTunesURL(searchText: "Hillsong")
-        print ("URL: '\(url)'")
-        if let data = performStoreRequest(with: url) {
-            let results = parse(data: data)
-            print ("Results: '\(results)'")
-        }
+        let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
+        let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
+  
+        let pcoConfig =    Config(base: "https://api.planningcenteronline.com/",
+                               authzEndpoint: "oauth/authorize",
+                               redirectURL: "https://com.krtapps.pcoOAuth2/",
+                               accessTokenEndpoint: "oauth/token ",
+                               clientId: clientID,
+                               scopes: ["services"],
+                               clientSecret: clientSecret)
+        
+        let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
+        //3
+        var http = Http()
+        http.authzModule = gdModule
+        
+        http.request(method: .get,
+                     path: "https://api.planningcenteronline.com/services/v2/service_types/1/plans",
+                       completionHandler: {(response, error) in
+                        if (error != nil) {
+                            print("Error \(error!.localizedDescription)")
+                        } else {
+                            print("Successfully connected to PCO!")
+                        }
+        })
+        
         
         
     }

@@ -23,7 +23,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Go!"/>
                                 <connections>
-                                    <action selector="goPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wal-uJ-xQF"/>
+                                    <action selector="goPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="sey-2T-ovn"/>
                                 </connections>
                             </button>
                         </subviews>

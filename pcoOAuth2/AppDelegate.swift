@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AeroGearOAuth2
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,6 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+
+        let notification = Notification(name: Notification.Name(AGAppLaunchedWithURLNotification),
+                                        object: nil,
+                                        userInfo: [UIApplicationLaunchOptionsKey.url:url])
+
+        NotificationCenter.default.post(notification)
+
+        return true
+    }
 
 }
 

@@ -13,6 +13,10 @@ import UIKit
 
 // https://api.planningcenteronline.com/oauth/authorize
 // https://api.planningcenteronline.com/oauth/token
+
+//
+
+
 // scope = services
 // 1
 import AeroGearHttp
@@ -42,24 +46,24 @@ class ViewController: UIViewController {
   
         let pcoConfig =    Config(base: "https://api.planningcenteronline.com/",
                                authzEndpoint: "oauth/authorize",
-                               redirectURL: "https://com.krtapps.pcoOAuth2/",
-                               accessTokenEndpoint: "oauth/token ",
+                               redirectURL: "com.krtapps.pcooauth2://pcooauth2/",
+                               accessTokenEndpoint: "oauth/token", // no space on the end of this!
                                clientId: clientID,
                                scopes: ["services"],
                                clientSecret: clientSecret)
         
         let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
         //3
-        var http = Http()
+        let http = Http()
         http.authzModule = gdModule
         
         http.request(method: .get,
-                     path: "https://api.planningcenteronline.com/services/v2/service_types/1/plans",
+                     path: "https://api.planningcenteronline.com/services/v2/service_types",
                        completionHandler: {(response, error) in
                         if (error != nil) {
-                            print("Error \(error!.localizedDescription)")
+                            print("Error -> \(error!.localizedDescription)")
                         } else {
-                            print("Successfully connected to PCO!")
+                            print("\(response!)")
                         }
         })
         

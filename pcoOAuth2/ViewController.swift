@@ -49,6 +49,7 @@ class ViewController: UIViewController {
                                redirectURL: "com.krtapps.pcooauth2://pcooauth2/",
                                accessTokenEndpoint: "oauth/token", // no space on the end of this!
                                clientId: clientID,
+                               refreshTokenEndpoint: "oauth/token",
                                scopes: ["services"],
                                clientSecret: clientSecret)
         
@@ -63,13 +64,36 @@ class ViewController: UIViewController {
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
                         } else {
-                            print("\(response!)")
+                          //  print("\(response!)")
+                            if  let response = response as? Dictionary<String, Any> {
+                                  print("\(response)")
+                                
+                                
+                                let dict = ["key1" : 7, "key2" : "Fred"] as [String : Any]
+                                print("\(dict)")
+                                print("hi")
+//                                print("\(response["meta"]?["total_count"]?)")
+//                                let meta = response["meta"] as? Dictionary<String, Any>
+//                                print("\(meta)")
+                            }
+//                            if let response = response as? Dictionary<String, Any>, let data = response["data"] as? [ServiceType] {
+//                                for st in data {
+//                                    if let serviceType = st as? ServiceType, let name  = st.attributes["name"] as? String {
+//                                        print ("\(name)")
+//
+//                                }
+////                                    let joke = Joke(id: id, description: description)
+//                                }
+//                            }
                         }
         })
         
         
         
     }
+    
+    
+    
     
     func performStoreRequest(with url: URL) -> Data? {
         do {

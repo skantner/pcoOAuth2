@@ -54,11 +54,11 @@ class ViewController: UIViewController {
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
                         } else {
-//                            if let jsonResult = response! as? NSDictionary,
-//                                let meta = jsonResult["meta"] as? NSDictionary,
+//                            if let jsonResult = response as? Dictionary<String, Any>,
+//                                let meta = jsonResult["meta"] as? Dictionary<String, Any>,
 //                                let total = meta["total_count"] {
 //                            }
-                            if let jsonResult = response! as? Dictionary<String, Any>,
+                            if let jsonResult = response as? Dictionary<String, Any>,
                                 let serviceTypes = jsonResult["data"] as? [Any] {
                                 for serviceType in serviceTypes {
                                     if let stype = serviceType as? Dictionary<String, Any>,

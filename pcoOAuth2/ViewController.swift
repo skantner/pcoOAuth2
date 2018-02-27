@@ -15,7 +15,7 @@ import AeroGearOAuth2
 
 class ViewController: UIViewController {
     
-    var serviceTypeList : [String]
+    var serviceTypeList : [String : String]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        serviceTypeList = [String]()
+        serviceTypeList = [String : String]()
         super.init(coder: aDecoder)
     }
     
@@ -54,28 +54,24 @@ class ViewController: UIViewController {
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
                         } else {
-                            if let jsonResult = response! as? NSDictionary,
-                                let meta = jsonResult["meta"] as? NSDictionary,
-                                let total = meta["total_count"] {
-                                        print("Total = \(total)")
-                            }
-                            if let jsonResult = response! as? NSDictionary,
-                                let serviceTypes = jsonResult["data"] as? NSArray {
+//                            if let jsonResult = response! as? NSDictionary,
+//                                let meta = jsonResult["meta"] as? NSDictionary,
+//                                let total = meta["total_count"] {
+//                            }
+                            if let jsonResult = response! as? Dictionary<String, Any>,
+                                let serviceTypes = jsonResult["data"] as? [Any] {
                                 for serviceType in serviceTypes {
-                                    if let stype = serviceType as? NSDictionary,
-                                        let attributes = stype["attributes"] as? NSDictionary,
+                                    if let stype = serviceType as? Dictionary<String, Any>,
+                                        let id = stype["id"] as? String,
+                                        let attributes = stype["attributes"] as? Dictionary<String, Any>,
                                         let name = attributes["name"] as? String {
-                                            print(" \(name)")
-                                            self.serviceTypeList.append(name)
+                                            self.serviceTypeList[name] = id
                                         }
                                     }
                                 }
                             }
-                        print ("stop")
-
                         }
         )
-     print ("stop")
     }
 
     

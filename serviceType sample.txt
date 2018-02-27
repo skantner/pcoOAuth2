@@ -1,0 +1,188 @@
+{
+  "links": {
+    "self": "https://api.planningcenteronline.com/services/v2/service_types"
+  },
+  "data": [
+    {
+      "type": "ServiceType",
+      "id": "541380",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2015-12-18T12:18:15Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "10:30 Contemporary Service",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2018-01-29T02:07:25Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/541380"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "545118",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-01-02T22:03:57Z",
+        "frequency": "Monthly",
+        "last_plan_from": "organization",
+        "name": "Communion ",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2017-06-24T13:33:35Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/545118"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "577118",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-03-11T00:10:51Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "Maundy Thursday",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2016-03-11T00:10:52Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/577118"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "587638",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-04-09T23:02:28Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "First Friday/#ascribe",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2018-02-02T13:28:58Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/587638"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "603898",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-05-24T22:36:41Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "Baptism",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2017-01-26T12:20:21Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/603898"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "629693",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-08-17T18:56:19Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "Rehearsal",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2017-06-06T01:42:16Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/629693"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    },
+    {
+      "type": "ServiceType",
+      "id": "644342",
+      "attributes": {
+        "attachment_types_enabled": false,
+        "background_check_permissions": "default",
+        "comment_permissions": "Scheduled Viewer",
+        "created_at": "2016-10-06T00:55:28Z",
+        "frequency": "Weekly",
+        "last_plan_from": "organization",
+        "name": "Evening Service",
+        "permissions": "Administrator",
+        "sequence": 0,
+        "updated_at": "2016-10-06T00:55:29Z"
+      },
+      "links": {
+        "self": "https://api.planningcenteronline.com/services/v2/service_types/644342"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        }
+      }
+    }
+  ],
+  "included": [],
+  "meta": {
+    "total_count": 7,
+    "count": 7,
+    "can_include": [
+      "time_preference_options",
+      "path"
+    ],
+    "parent": {
+      "id": "182554",
+      "type": "Organization"
+    }
+  }
+}

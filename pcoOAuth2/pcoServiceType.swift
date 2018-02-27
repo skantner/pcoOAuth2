@@ -11,28 +11,134 @@
 // relationships: dict of dict
 // Plan - major type
 
-class ServiceType {
-    let type = "ServiceType"
-    var id = ""
-    var attributes = [
-        "attachment_types_enabled" : false,
-        "background_check_permissions" : "default",
-        "comment_permissions" : "Scheduled Viewer",
-        "created_at" : "",
-        "frequency" : "",
-        "last_plan_from" : "organization",
-        "name" : "",
-        "permissions" : "Administrator",
-        "sequence" : 0,
-        "updated_at" : ""
-        ] as [String : Any]
-    var links = [String: String]()
-    var relationships = [String: [String: String]]()
+struct PagedBreweries : Codable {
+    struct Meta : Codable {
+        let page: Int
+        let totalPages: Int
+        let perPage: Int
+        let totalRecords: Int
+        enum CodingKeys : String, CodingKey {
+            case page
+            case totalPages = "total_pages"
+            case perPage = "per_page"
+            case totalRecords = "total_records"
+        }
+    }
+    
+    struct Brewery : Codable {
+        let id: Int
+        let name: String
+    }
+    
+    let meta: Meta
+    let breweries: [Brewery]
 }
 
-class ServiceTypeResults {
-    var links = [String: String]()
-    var data = [ServiceType]()
-    var included = [String]()
-    var meta = [String: String]()
+struct Parent : Codable {
+    let data : String
 }
+
+//struct ServiceTypeList : Codable {
+//    struct ServiceType : Codable {
+//        struct Attributes : Codable {
+//                let attachmentTypesEnabled : Int
+//                let backgroundCheckPermissions : String
+//                let commentPermissions : String
+//                let createdAt : String
+//                let frequency : String
+//                let lastPlanFrom : String
+//                let name : String
+//                let permissions : String
+//                let sequence : Int
+//                let updatedAt : String
+//                enum CodingKeys : String, CodingKey {
+//                    case attachmentTypesEnabled = "attachment_types_enabled"
+//                    case backgroundCheckPermissions = "background_check_permissions"
+//                    case commentPermissions = "comment_permissions"
+//                    case createdAt = "created_at"
+//                    case frequency
+//                    case lastPlanFrom = "last_plan_from"
+//                    case name
+//                    case permissions
+//                    case sequence
+//                    case updatedAt = "updated_at"
+//                }
+//        }
+//        let type : String
+//        let id : Int
+//        let attributes : Attributes
+//        let links : [String : String]
+//        let relationships : [Parent]
+//    }
+//    struct Meta : Codable {
+//        let totalCount : Int
+//        let count: Int
+//        let canInclude: [String]
+//        let parent : [Parent]
+//        enum CodingKeys : String, CodingKey {
+//            case totalCount = "total_count"
+//            case count
+//            case canInclude = "can_include"
+//            case parent
+//        }
+//    }
+//
+//    let links : [String: String]
+//    let data : [ServiceType]
+//    let included : [String: String]
+//    let meta : Meta
+//}
+
+//class ServiceTypeList : Codable {
+//    struct ServiceType : Codable {
+//        struct Attributes : Codable {
+//            let attachmentTypesEnabled : Int
+//            let backgroundCheckPermissions : String
+//            let commentPermissions : String
+//            let createdAt : String
+//            let frequency : String
+//            let lastPlanFrom : String
+//            let name : String
+//            let permissions : String
+//            let sequence : Int
+//            let updatedAt : String
+//            enum CodingKeys : String, CodingKey {
+//                case attachmentTypesEnabled = "attachment_types_enabled"
+//                case backgroundCheckPermissions = "background_check_permissions"
+//                case commentPermissions = "comment_permissions"
+//                case createdAt = "created_at"
+//                case frequency
+//                case lastPlanFrom = "last_plan_from"
+//                case name
+//                case permissions
+//                case sequence
+//                case updatedAt = "updated_at"
+//            }
+//        }
+//        let type : String
+//        let id : Int
+//        let attributes : Attributes
+//        let links : [String : String]
+//        let relationships : [Parent]
+//    }
+//    struct Meta : Codable {
+//        let totalCount : Int
+//        let count: Int
+//        let canInclude: [String]
+//        let parent : [Parent]
+//        enum CodingKeys : String, CodingKey {
+//            case totalCount = "total_count"
+//            case count
+//            case canInclude = "can_include"
+//            case parent
+//        }
+//    }
+//    
+//    let links : [String: String]
+//    let data : [ServiceType]
+//    let included : [String: String]
+//    let meta : Meta
+//}
+
+
+

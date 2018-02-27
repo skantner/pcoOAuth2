@@ -8,15 +8,6 @@
 
 import UIKit
 
-// PCO Client ID = 3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b
-// PCO Secret = 896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873
-
-// https://api.planningcenteronline.com/oauth/authorize
-// https://api.planningcenteronline.com/oauth/token
-
-//
-
-
 // scope = services
 // 1
 import AeroGearHttp
@@ -24,18 +15,17 @@ import AeroGearOAuth2
 
 class ViewController: UIViewController {
     
+    var serviceTypeList : [String]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
     }
     
-    
-    func iTunesURL(searchText: String) -> URL {
-        let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = String(format:"https://itunes.apple.com/search?term=%@", encodedText)
-        let url = URL(string: urlString)
-        return url!
+    required init?(coder aDecoder: NSCoder) {
+        serviceTypeList = [String]()
+        super.init(coder: aDecoder)
     }
     
     
@@ -64,36 +54,30 @@ class ViewController: UIViewController {
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
                         } else {
-                          //  print("\(response!)")
-                            if  let response = response as? Dictionary<String, Any> {
-                                  print("\(response)")
-                                
-                                
-                                let dict = ["key1" : 7, "key2" : "Fred"] as [String : Any]
-                                print("\(dict)")
-                                print("hi")
-//                                print("\(response["meta"]?["total_count"]?)")
-//                                let meta = response["meta"] as? Dictionary<String, Any>
-//                                print("\(meta)")
+                            if let jsonResult = response! as? NSDictionary,
+                                let meta = jsonResult["meta"] as? NSDictionary,
+                                let total = meta["total_count"] {
+                                        print("Total = \(total)")
                             }
-//                            if let response = response as? Dictionary<String, Any>, let data = response["data"] as? [ServiceType] {
-//                                for st in data {
-//                                    if let serviceType = st as? ServiceType, let name  = st.attributes["name"] as? String {
-//                                        print ("\(name)")
-//
-//                                }
-////                                    let joke = Joke(id: id, description: description)
-//                                }
-//                            }
+                            if let jsonResult = response! as? NSDictionary,
+                                let serviceTypes = jsonResult["data"] as? NSArray {
+                                for serviceType in serviceTypes {
+                                    if let stype = serviceType as? NSDictionary,
+                                        let attributes = stype["attributes"] as? NSDictionary,
+                                        let name = attributes["name"] as? String {
+                                            print(" \(name)")
+                                            self.serviceTypeList.append(name)
+                                        }
+                                    }
+                                }
+                            }
+                        print ("stop")
+
                         }
-        })
-        
-        
-        
+        )
+     print ("stop")
     }
-    
-    
-    
+
     
     func performStoreRequest(with url: URL) -> Data? {
         do {

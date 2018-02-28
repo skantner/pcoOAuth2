@@ -16,38 +16,48 @@ import AeroGearOAuth2
 class ViewController: UIViewController {
     
     var serviceTypeList : [String : String]
+    let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
+    let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
+    let http = Http()
+    var userID : String
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
         
+        let pcoConfig =    Config(base: "https://api.planningcenteronline.com/",
+                                  authzEndpoint: "oauth/authorize",
+                                  redirectURL: "com.krtapps.pcooauth2://pcooauth2/",
+                                  accessTokenEndpoint: "oauth/token", // no space on the end of this!
+            clientId: clientID,
+            refreshTokenEndpoint: "oauth/token",
+            scopes: ["services"],
+            clientSecret: clientSecret)
+        
+        let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
+        //3
+        http.authzModule = gdModule
+
     }
     
     required init?(coder aDecoder: NSCoder) {
-        serviceTypeList = [String : String]()
+        self.serviceTypeList = [String : String]()
+        self.userID = "NotFound"
+        
         super.init(coder: aDecoder)
     }
     
     
     @IBAction func goPressed() {
         
-        let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
-        let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
-  
-        let pcoConfig =    Config(base: "https://api.planningcenteronline.com/",
-                               authzEndpoint: "oauth/authorize",
-                               redirectURL: "com.krtapps.pcooauth2://pcooauth2/",
-                               accessTokenEndpoint: "oauth/token", // no space on the end of this!
-                               clientId: clientID,
-                               refreshTokenEndpoint: "oauth/token",
-                               scopes: ["services"],
-                               clientSecret: clientSecret)
+        getPCOuserId()
         
-        let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
-        //3
-        let http = Http()
-        http.authzModule = gdModule
-        
+//        DispatchQueue.main.async(execute: {
+//            self.updateUISuccess(resp)
+//        })
+
+/*
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/service_types",
                        completionHandler: {(response, error) in
@@ -70,11 +80,27 @@ class ViewController: UIViewController {
                                     }
                                 }
                             }
-                        }
-        )
+                        })
+ */
     }
 
-    
+    func getPCOuserId() {
+        
+        http.request(method: .get,
+                     path: "https://api.planningcenteronline.com/services/v2/me",
+                     completionHandler: {(response, error) in
+                        if (error != nil) {
+                            print("Error -> \(error!.localizedDescription)")
+                        } else {
+                            if let jsonResult = response as? Dictionary<String, Any>,
+                                let data = jsonResult["data"] as? Dictionary<String, Any>,
+                                let id = data["id"] as? String {
+                                self.userID = id
+                                print("PCO User ID:\(self.userID)")
+                            }
+                        }
+        })
+    }
 
     
     func showNetworkError() {

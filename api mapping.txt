@@ -1,3 +1,9 @@
+// Get current user's info
+https://api.planningcenteronline.com/services/v2/me
+
+
+
+
 // Get user's ID
 
 https://api.planningcenteronline.com/services/v2/people

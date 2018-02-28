@@ -75,27 +75,7 @@ class ViewController: UIViewController {
     }
 
     
-    func performStoreRequest(with url: URL) -> Data? {
-        do {
-            return try Data(contentsOf: url)
-        } catch {
-            print("Download error: \(error.localizedDescription)")
-            showNetworkError()
-            return nil
-            
-        }
-    }
-    
-    func parse(data: Data) -> [SearchResult] {
-        do {
-            let decoder = JSONDecoder()
-            let result = try decoder.decode(ResultArray.self, from: data)
-            return result.results
-        } catch {
-            print("JSON error: \(error)")
-            return []
-        }
-    }
+
     
     func showNetworkError() {
         let alert = UIAlertController(title: "Whoops...",

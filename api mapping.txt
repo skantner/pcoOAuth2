@@ -1,0 +1,38 @@
+// Get user's ID
+
+https://api.planningcenteronline.com/services/v2/people
+
+Sharon : 12543422
+Scott: 16725828
+Test User: 35066026
+
+// Get user's schedules
+
+https://api.planningcenteronline.com/services/v2/people/12543422/schedules
+// list schedules person is a part of...e.g. Sharon here
+//  provides service_type id and plan id 'relationships' dictionary
+
+
+// Pull a particular plan the user is scheduled for
+// below, 541380 is the particular service_type, and 35087404 is plan id
+https://api.planningcenteronline.com/services/v2/service_types/541380/plans/35087404
+// in the 'links' dictionary, use the 'items' link, or just append 'items' to this url
+
+
+// Get the plan items and include links for the songs
+https://api.planningcenteronline.com/services/v2/service_types/541380/plans/35087404/items?include=song
+
+
+
+
+
+
+
+https://api.planningcenteronline.com/services/v2/service_types/541380/plans?filter=future
+
+type="Plan"
+id : 35087404
+Mar 11
+
+Communion Service_type id = 545118
+10:30 service id = 35087404

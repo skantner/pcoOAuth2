@@ -10,6 +10,9 @@ import UIKit
 
 // scope = services
 // 1
+
+//CoreDataSaveFailedNotification = Notification.Name(rawValue: "CoreDataSaveFailedNotification")
+
 import AeroGearHttp
 import AeroGearOAuth2
 
@@ -20,7 +23,10 @@ class ViewController: UIViewController {
     let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
     let http = Http()
     var userID : String
-
+    let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
+    
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +44,9 @@ class ViewController: UIViewController {
         let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
         //3
         http.authzModule = gdModule
+        
+        self.spinner.isHidden = true
+
 
     }
     
@@ -86,6 +95,9 @@ class ViewController: UIViewController {
 
     func getPCOuserId() {
         
+        self.spinner.startAnimating()
+        self.spinner.isHidden = false
+        
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/me",
                      completionHandler: {(response, error) in
@@ -97,6 +109,10 @@ class ViewController: UIViewController {
                                 let id = data["id"] as? String {
                                 self.userID = id
                                 print("PCO User ID:\(self.userID)")
+                                DispatchQueue.main.async {
+                                    self.spinner.stopAnimating()
+                                    self.spinner.isHidden = true
+                                }
                             }
                         }
         })

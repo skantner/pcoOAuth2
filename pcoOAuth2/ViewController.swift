@@ -117,18 +117,56 @@ class ViewController: UIViewController {
                                 let firstName = attributes["first_name"] as? String {
                                 self.userID = id
                                 self.userName = firstName + " " + lastName;
-                                print("PCO User ID:\(self.userID)")
+                                print("PCO User Info: \(self.userName), ID = \(self.userID)")
                                 DispatchQueue.main.async {
                                     self.spinner.stopAnimating()
                                     self.spinner.isHidden = true
                                     self.userIDLabel.text = self.userID
                                     self.nameLabel.text = self.userName
+                                    self.getPCOSchedules(userID: self.userID)
                                 }
                             }
                         }
         })
     }
+    
 
+    func getPCOSchedules(userID: String) {
+        
+        self.spinner.startAnimating()
+        self.spinner.isHidden = false
+        
+        http.request(method: .get,
+                     path: "https://api.planningcenteronline.com/services/v2/people/\(userID)/schedules",
+                     completionHandler: {(response, error) in
+                        if (error != nil) {
+                            print("Error -> \(error!.localizedDescription)")
+                        } else {
+                            if let jsonResult = response as? Dictionary<String, Any>,
+                                let scheduleData = jsonResult["data"] as? [Any] {
+                                for schedule in scheduleData {
+                                    if let sched = schedule as? Dictionary<String, Any>,
+                                        let schedID = sched["id"] as? String,
+                                        let attributes = sched["attributes"] as? Dictionary<String, Any>,
+                                        let serviceTypeName = attributes["service_type_name"] as? String,
+                                        let shortDates = attributes["short_dates"] as? String,
+                                        let teamName = attributes["team_name"] as? String,
+                                        let relationships = sched["relationships"] as? Dictionary<String, Any>,
+                                        let plan = relationships["plan"] as? Dictionary<String, Any>,
+                                        let planData = plan["data"] as? Dictionary<String, Any>,
+                                        let planID = planData["id"] as? String {
+                                            print("Schedule Data: \(schedID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
+                                        DispatchQueue.main.async {
+                                            self.spinner.stopAnimating()
+                                            self.spinner.isHidden = true
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+        })
+    }
     
     func showNetworkError() {
         let alert = UIAlertController(title: "Whoops...",

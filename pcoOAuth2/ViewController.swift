@@ -23,9 +23,13 @@ class ViewController: UIViewController {
     let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
     let http = Http()
     var userID : String
+    var userName : String
+    
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var userIDLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -53,6 +57,7 @@ class ViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         self.serviceTypeList = [String : String]()
         self.userID = "NotFound"
+        self.userName = ""
         
         super.init(coder: aDecoder)
     }
@@ -106,12 +111,18 @@ class ViewController: UIViewController {
                         } else {
                             if let jsonResult = response as? Dictionary<String, Any>,
                                 let data = jsonResult["data"] as? Dictionary<String, Any>,
-                                let id = data["id"] as? String {
+                                let id = data["id"] as? String,
+                                let attributes = data["attributes"] as? Dictionary<String, Any>,
+                                let lastName = attributes["last_name"] as? String,
+                                let firstName = attributes["first_name"] as? String {
                                 self.userID = id
+                                self.userName = firstName + " " + lastName;
                                 print("PCO User ID:\(self.userID)")
                                 DispatchQueue.main.async {
                                     self.spinner.stopAnimating()
                                     self.spinner.isHidden = true
+                                    self.userIDLabel.text = self.userID
+                                    self.nameLabel.text = self.userName
                                 }
                             }
                         }

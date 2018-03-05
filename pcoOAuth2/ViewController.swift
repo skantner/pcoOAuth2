@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     let http = Http()
     var userID : String
     var userName : String
+    var scheduledPlans : [String: String]
     
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
@@ -55,10 +56,12 @@ class ViewController: UIViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
+        
         self.serviceTypeList = [String : String]()
         self.userID = "NotFound"
         self.userName = ""
-        
+        self.scheduledPlans = [String: String]()
+
         super.init(coder: aDecoder)
     }
     

@@ -11,32 +11,32 @@
 // relationships: dict of dict
 // Plan - major type
 
-struct PagedBreweries : Codable {
-    struct Meta : Codable {
-        let page: Int
-        let totalPages: Int
-        let perPage: Int
-        let totalRecords: Int
-        enum CodingKeys : String, CodingKey {
-            case page
-            case totalPages = "total_pages"
-            case perPage = "per_page"
-            case totalRecords = "total_records"
-        }
-    }
-    
-    struct Brewery : Codable {
-        let id: Int
-        let name: String
-    }
-    
-    let meta: Meta
-    let breweries: [Brewery]
-}
-
-struct Parent : Codable {
-    let data : String
-}
+//struct PagedBreweries : Codable {
+//    struct Meta : Codable {
+//        let page: Int
+//        let totalPages: Int
+//        let perPage: Int
+//        let totalRecords: Int
+//        enum CodingKeys : String, CodingKey {
+//            case page
+//            case totalPages = "total_pages"
+//            case perPage = "per_page"
+//            case totalRecords = "total_records"
+//        }
+//    }
+//    
+//    struct Brewery : Codable {
+//        let id: Int
+//        let name: String
+//    }
+//    
+//    let meta: Meta
+//    let breweries: [Brewery]
+//}
+//
+//struct Parent : Codable {
+//    let data : String
+//}
 
 //struct ServiceTypeList : Codable {
 //    struct ServiceType : Codable {

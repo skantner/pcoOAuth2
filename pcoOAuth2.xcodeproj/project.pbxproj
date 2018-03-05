@@ -10,6 +10,7 @@
 		065FDFD84E90C9E9F1694FCD /* Pods_pcoOAuth2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F088CAFFDCD94E5A247135E1 /* Pods_pcoOAuth2.framework */; };
 		770DDB1D204258910083631D /* pcoServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770DDB1C204258910083631D /* pcoServiceType.swift */; };
 		7739BC54203BA72E005C1F79 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739BC53203BA72E005C1F79 /* SearchResult.swift */; };
+		7741363E204DBE9900739346 /* ScheduledPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7741363D204DBE9900739346 /* ScheduledPlan.swift */; };
 		775FD41B203B0723008DDC49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775FD41A203B0723008DDC49 /* AppDelegate.swift */; };
 		775FD41D203B0723008DDC49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775FD41C203B0723008DDC49 /* ViewController.swift */; };
 		775FD420203B0723008DDC49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD41E203B0723008DDC49 /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 		31755A627F1F0243C7DC4D39 /* Pods-pcoOAuth2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pcoOAuth2.release.xcconfig"; path = "Pods/Target Support Files/Pods-pcoOAuth2/Pods-pcoOAuth2.release.xcconfig"; sourceTree = "<group>"; };
 		770DDB1C204258910083631D /* pcoServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pcoServiceType.swift; sourceTree = "<group>"; };
 		7739BC53203BA72E005C1F79 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		7741363D204DBE9900739346 /* ScheduledPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledPlan.swift; sourceTree = "<group>"; };
 		775FD417203B0723008DDC49 /* pcoOAuth2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pcoOAuth2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		775FD41A203B0723008DDC49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		775FD41C203B0723008DDC49 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				775FD423203B0723008DDC49 /* LaunchScreen.storyboard */,
 				775FD426203B0723008DDC49 /* Info.plist */,
 				770DDB1C204258910083631D /* pcoServiceType.swift */,
+				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
 			);
 			path = pcoOAuth2;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				775FD41D203B0723008DDC49 /* ViewController.swift in Sources */,
 				770DDB1D204258910083631D /* pcoServiceType.swift in Sources */,
 				7739BC54203BA72E005C1F79 /* SearchResult.swift in Sources */,
+				7741363E204DBE9900739346 /* ScheduledPlan.swift in Sources */,
 				775FD41B203B0723008DDC49 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

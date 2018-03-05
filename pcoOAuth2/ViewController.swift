@@ -16,7 +16,7 @@ import UIKit
 import AeroGearHttp
 import AeroGearOAuth2
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var serviceTypeList : [String : String]
     let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
@@ -24,19 +24,18 @@ class ViewController: UIViewController {
     let http = Http()
     var userID : String
     var userName : String
-    var scheduledPlans : [String: String]
+    var scheduledPlans : [ScheduledPlan]
     
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var userIDLabel: UILabel!
-    
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         let pcoConfig =    Config(base: "https://api.planningcenteronline.com/",
                                   authzEndpoint: "oauth/authorize",
                                   redirectURL: "com.krtapps.pcooauth2://pcooauth2/",
@@ -51,8 +50,6 @@ class ViewController: UIViewController {
         http.authzModule = gdModule
         
         self.spinner.isHidden = true
-
-
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -60,7 +57,7 @@ class ViewController: UIViewController {
         self.serviceTypeList = [String : String]()
         self.userID = "NotFound"
         self.userName = ""
-        self.scheduledPlans = [String: String]()
+        self.scheduledPlans = [ScheduledPlan]()
 
         super.init(coder: aDecoder)
     }
@@ -159,9 +156,13 @@ class ViewController: UIViewController {
                                         let planData = plan["data"] as? Dictionary<String, Any>,
                                         let planID = planData["id"] as? String {
                                             print("Schedule Data: \(schedID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
+                                        let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceType: serviceTypeName)
+                                        self.scheduledPlans.append(scheduledPlan)
+                                        
                                         DispatchQueue.main.async {
                                             self.spinner.stopAnimating()
                                             self.spinner.isHidden = true
+                                            self.tableView.reloadData()
                                         }
 
                                     }
@@ -170,6 +171,28 @@ class ViewController: UIViewController {
                         }
         })
     }
+
+    //MARK: - TableView methods
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.scheduledPlans.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for:indexPath)
+        
+        let label = cell.viewWithTag(1000) as! UILabel
+        let detalLabel = cell.viewWithTag(1001) as! UILabel
+
+        let sp = self.scheduledPlans[indexPath.row]
+        
+        label.text = sp.scheduledDate
+        detalLabel.text = sp.planID
+        
+        return cell
+    }
+    
+    // MARK: - Housekeeping
     
     func showNetworkError() {
         let alert = UIAlertController(title: "Whoops...",
@@ -183,7 +206,6 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
 }
 

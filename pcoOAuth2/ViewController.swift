@@ -18,6 +18,14 @@ import AeroGearOAuth2
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    override var childViewControllerForStatusBarStyle:UIViewController? {
+        return nil
+    }
+    
     var serviceTypeList : [String : String]
     let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
     let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
@@ -25,6 +33,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var userID : String
     var userName : String
     var scheduledPlans : [ScheduledPlan]
+    var selectedPlan : Int
     
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
@@ -58,6 +67,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.userID = "NotFound"
         self.userName = ""
         self.scheduledPlans = [ScheduledPlan]()
+        self.selectedPlan = 0
 
         super.init(coder: aDecoder)
     }
@@ -136,6 +146,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.spinner.startAnimating()
         self.spinner.isHidden = false
         
+        self.scheduledPlans.removeAll()
+        
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/people/\(userID)/schedules",
                      completionHandler: {(response, error) in
@@ -154,9 +166,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                         let relationships = sched["relationships"] as? Dictionary<String, Any>,
                                         let plan = relationships["plan"] as? Dictionary<String, Any>,
                                         let planData = plan["data"] as? Dictionary<String, Any>,
-                                        let planID = planData["id"] as? String {
-                                            print("Schedule Data: \(schedID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
-                                        let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceType: serviceTypeName)
+                                        let planID = planData["id"] as? String,
+                                        let service = relationships["service_type"] as? Dictionary<String, Any>,
+                                        let serviceData = service["data"] as? Dictionary<String, Any>,
+                                        let serviceTypeID = serviceData["id"] as? String {
+                                            print("Schedule Data: \(schedID):SType=\(serviceTypeID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
+                                        let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceTypeID: serviceTypeID, serviceTypeName: serviceTypeName)
                                         self.scheduledPlans.append(scheduledPlan)
                                         
                                         DispatchQueue.main.async {
@@ -187,13 +202,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let sp = self.scheduledPlans[indexPath.row]
         
         label.text = sp.scheduledDate
-        detalLabel.text = sp.planID
+        detalLabel.text = "Plan ID: " + sp.planID + ", Service Type ID: " + sp.serviceTypeID
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectedPlan = indexPath.row
         performSegue(withIdentifier: "ShowPlan", sender: nil)
+    }
+    
+    //MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem
+        
+        if segue.identifier == "ShowPlan" {
+            let planVC = segue.destination as! PlanItemsViewController
+            planVC.planID = self.scheduledPlans[selectedPlan].planID
+            planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
+            planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName
+            planVC.schedDate = self.scheduledPlans[selectedPlan].scheduledDate
+         }
     }
     
     // MARK: - Housekeeping

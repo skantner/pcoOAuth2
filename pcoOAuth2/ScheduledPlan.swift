@@ -11,12 +11,14 @@ import Foundation
 class ScheduledPlan: NSObject {
     var planID = ""
     var scheduledDate = ""
+    var serviceTypeID = ""
     var serviceTypeName = ""
     
-    init(planID : String, schedDate : String, serviceType : String) {
+    init(planID : String, schedDate : String, serviceTypeID : String, serviceTypeName : String) {
         self.planID = planID
         self.scheduledDate = schedDate
-        self.serviceTypeName = serviceType
+        self.serviceTypeID = serviceTypeID
+        self.serviceTypeName = serviceTypeName
         
         super.init()
     }

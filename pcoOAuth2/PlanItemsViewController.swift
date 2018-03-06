@@ -10,20 +10,23 @@ import UIKit
 
 class PlanItemsViewController: UITableViewController {
 
+    var planID : String = ""
+    var serviceTypeID: String = ""
+    var serviceTypeName: String = ""
+    var schedDate : String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        
+        print ("PlanID:\(planID):ServiceTypeID:\(serviceTypeID):ServiceTypeName:\(serviceTypeName)")
+        self.navigationItem.title = self.schedDate
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -93,4 +96,11 @@ class PlanItemsViewController: UITableViewController {
     }
     */
 
+    // MARK: - Housekeeping
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
 }

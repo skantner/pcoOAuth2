@@ -146,10 +146,10 @@
             </objects>
             <point key="canvasLocation" x="479.19999999999999" y="133.5832083958021"/>
         </scene>
-        <!--Plan Items View Controller-->
+        <!--Plan Items-->
         <scene sceneID="6YZ-me-5Ip">
             <objects>
-                <tableViewController id="LcI-ib-kej" customClass="PlanItemsViewController" customModule="pcoOAuth2" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Plan Items" id="LcI-ib-kej" customClass="PlanItemsViewController" customModule="pcoOAuth2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="drt-5z-ekN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -69,18 +69,26 @@
 		775FD419203B0723008DDC49 /* pcoOAuth2 */ = {
 			isa = PBXGroup;
 			children = (
-				7739BC53203BA72E005C1F79 /* SearchResult.swift */,
 				775FD41A203B0723008DDC49 /* AppDelegate.swift */,
+				77CDA1D7204EC31B00CBA09D /* PlanItemsViewController.swift */,
+				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
 				775FD41C203B0723008DDC49 /* ViewController.swift */,
 				775FD41E203B0723008DDC49 /* Main.storyboard */,
-				775FD421203B0723008DDC49 /* Assets.xcassets */,
 				775FD423203B0723008DDC49 /* LaunchScreen.storyboard */,
 				775FD426203B0723008DDC49 /* Info.plist */,
-				770DDB1C204258910083631D /* pcoServiceType.swift */,
-				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
-				77CDA1D7204EC31B00CBA09D /* PlanItemsViewController.swift */,
+				77EDEEC2204EF63800BAA527 /* Scrap */,
+				775FD421203B0723008DDC49 /* Assets.xcassets */,
 			);
 			path = pcoOAuth2;
+			sourceTree = "<group>";
+		};
+		77EDEEC2204EF63800BAA527 /* Scrap */ = {
+			isa = PBXGroup;
+			children = (
+				7739BC53203BA72E005C1F79 /* SearchResult.swift */,
+				770DDB1C204258910083631D /* pcoServiceType.swift */,
+			);
+			path = Scrap;
 			sourceTree = "<group>";
 		};
 		890311C9A338FE614B1CC6EB /* Frameworks */ = {

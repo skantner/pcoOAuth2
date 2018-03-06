@@ -16,6 +16,9 @@ import UIKit
 import AeroGearHttp
 import AeroGearOAuth2
 
+let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
+let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -27,8 +30,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     var serviceTypeList : [String : String]
-    let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
-    let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
     let http = Http()
     var userID : String
     var userName : String

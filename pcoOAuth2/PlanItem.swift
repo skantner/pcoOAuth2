@@ -7,3 +7,17 @@
 //
 
 import Foundation
+
+class PlanItem: NSObject {
+    var itemID = ""
+    var title = ""
+    var sequence = 0
+    
+    init(itemID : String, title : String, sequence : Int) {
+        self.itemID = itemID
+        self.title = title
+        self.sequence = sequence
+        
+        super.init()
+    }
+}

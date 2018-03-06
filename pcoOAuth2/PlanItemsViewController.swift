@@ -17,6 +17,7 @@ class PlanItemsViewController: UITableViewController {
     var serviceTypeName = ""
     var schedDate = ""
     var http = Http()
+    var planItems = [PlanItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,52 @@ class PlanItemsViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        getPlanSongs()
+    }
+    
+    func getPlanSongs() {
+        
+        http.request(method: .get,
+                     path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items",
+            completionHandler: {(response, error) in
+                if (error != nil) {
+                    print("Error -> \(error!.localizedDescription)")
+                } else {
+                    if let jsonResult = response as? Dictionary<String, Any>,
+                        let scheduleData = jsonResult["data"] as? [Any] {
+                        for schedule in scheduleData {
+                            if let sched = schedule as? Dictionary<String, Any>,
+                                let schedID = sched["id"] as? String,
+                                let attributes = sched["attributes"] as? Dictionary<String, Any>,
+                                let serviceTypeName = attributes["service_type_name"] as? String,
+                                let shortDates = attributes["short_dates"] as? String,
+                                let teamName = attributes["team_name"] as? String,
+                                let relationships = sched["relationships"] as? Dictionary<String, Any>,
+                                let plan = relationships["plan"] as? Dictionary<String, Any>,
+                                let planData = plan["data"] as? Dictionary<String, Any>,
+                                let planID = planData["id"] as? String,
+                                let service = relationships["service_type"] as? Dictionary<String, Any>,
+                                let serviceData = service["data"] as? Dictionary<String, Any>,
+                                let serviceTypeID = serviceData["id"] as? String {
+                                print("Schedule Data: \(schedID):SType=\(serviceTypeID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
+                                let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceTypeID: serviceTypeID, serviceTypeName: serviceTypeName)
+                                self.scheduledPlans.append(scheduledPlan)
+                                
+                                DispatchQueue.main.async {
+                                    self.spinner.stopAnimating()
+                                    self.spinner.isHidden = true
+                                    self.tableView.reloadData()
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+        })
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

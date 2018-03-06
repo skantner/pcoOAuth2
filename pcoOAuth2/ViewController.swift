@@ -226,6 +226,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
             planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName
             planVC.schedDate = self.scheduledPlans[selectedPlan].scheduledDate
+            planVC.http = self.http
          }
     }
     

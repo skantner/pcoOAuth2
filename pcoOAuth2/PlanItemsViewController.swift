@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import AeroGearHttp
+import AeroGearOAuth2
 
 class PlanItemsViewController: UITableViewController {
 
-    var planID : String = ""
-    var serviceTypeID: String = ""
-    var serviceTypeName: String = ""
-    var schedDate : String = ""
+    var planID = ""
+    var serviceTypeID = ""
+    var serviceTypeName = ""
+    var schedDate = ""
+    var http = Http()
     
     override func viewDidLoad() {
         super.viewDidLoad()

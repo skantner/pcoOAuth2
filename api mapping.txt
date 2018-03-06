@@ -42,3 +42,11 @@ Mar 11
 
 Communion Service_type id = 545118
 10:30 service id = 35087404
+
+
+
+https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970732/items
+ loop through results and find item_type=song and grab itemID for each
+ 
+ the query each for their attachments
+  query https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970732/items/479221650/attachments

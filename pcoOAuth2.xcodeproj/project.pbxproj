@@ -16,6 +16,7 @@
 		775FD420203B0723008DDC49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD41E203B0723008DDC49 /* Main.storyboard */; };
 		775FD422203B0723008DDC49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775FD421203B0723008DDC49 /* Assets.xcassets */; };
 		775FD425203B0723008DDC49 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD423203B0723008DDC49 /* LaunchScreen.storyboard */; };
+		77CDA1D8204EC31B00CBA09D /* PlanItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CDA1D7204EC31B00CBA09D /* PlanItemsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		775FD421203B0723008DDC49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		775FD424203B0723008DDC49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		775FD426203B0723008DDC49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		77CDA1D7204EC31B00CBA09D /* PlanItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanItemsViewController.swift; sourceTree = "<group>"; };
 		F088CAFFDCD94E5A247135E1 /* Pods_pcoOAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pcoOAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -76,6 +78,7 @@
 				775FD426203B0723008DDC49 /* Info.plist */,
 				770DDB1C204258910083631D /* pcoServiceType.swift */,
 				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
+				77CDA1D7204EC31B00CBA09D /* PlanItemsViewController.swift */,
 			);
 			path = pcoOAuth2;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				770DDB1D204258910083631D /* pcoServiceType.swift in Sources */,
 				7739BC54203BA72E005C1F79 /* SearchResult.swift in Sources */,
 				7741363E204DBE9900739346 /* ScheduledPlan.swift in Sources */,
+				77CDA1D8204EC31B00CBA09D /* PlanItemsViewController.swift in Sources */,
 				775FD41B203B0723008DDC49 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

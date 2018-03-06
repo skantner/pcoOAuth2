@@ -192,6 +192,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ShowPlan", sender: nil)
+    }
+    
     // MARK: - Housekeeping
     
     func showNetworkError() {

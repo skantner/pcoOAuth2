@@ -8,14 +8,16 @@
 
 import Foundation
 
-class PlanItem: NSObject {
+class SongItem: NSObject {
     var itemID = ""
     var title = ""
+    var keyName = ""
     var sequence = 0
-    
-    init(itemID : String, title : String, sequence : Int) {
+
+    init(itemID : String, title : String, keyName : String, sequence : Int) {
         self.itemID = itemID
         self.title = title
+        self.keyName = keyName
         self.sequence = sequence
         
         super.init()

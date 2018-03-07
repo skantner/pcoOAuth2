@@ -198,12 +198,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for:indexPath)
         
         let label = cell.viewWithTag(1000) as! UILabel
-        let detalLabel = cell.viewWithTag(1001) as! UILabel
+        let detailLabel = cell.viewWithTag(1001) as! UILabel
 
         let sp = self.scheduledPlans[indexPath.row]
         
         label.text = sp.scheduledDate
-        detalLabel.text = "Plan ID: " + sp.planID + ", Service Type ID: " + sp.serviceTypeID
+        detailLabel.text = "Plan ID: " + sp.planID + ", Service Type ID: " + sp.serviceTypeID
         
         return cell
     }
@@ -221,7 +221,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationItem.backBarButtonItem = backItem
         
         if segue.identifier == "ShowPlan" {
-            let planVC = segue.destination as! PlanItemsViewController
+            let planVC = segue.destination as! SongItemsViewController
             planVC.planID = self.scheduledPlans[selectedPlan].planID
             planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
             planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName

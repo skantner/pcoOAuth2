@@ -10,14 +10,18 @@ import UIKit
 import AeroGearHttp
 import AeroGearOAuth2
 
-class PlanItemsViewController: UITableViewController {
+class SongItemsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
 
     var planID = ""
     var serviceTypeID = ""
     var serviceTypeName = ""
     var schedDate = ""
     var http = Http()
-    var planItems = [PlanItem]()
+    var songItems = [SongItem]()
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,58 +52,59 @@ class PlanItemsViewController: UITableViewController {
                     print("Error -> \(error!.localizedDescription)")
                 } else {
                     if let jsonResult = response as? Dictionary<String, Any>,
-                        let scheduleData = jsonResult["data"] as? [Any] {
-                        for schedule in scheduleData {
-                            if let sched = schedule as? Dictionary<String, Any>,
-                                let schedID = sched["id"] as? String,
-                                let attributes = sched["attributes"] as? Dictionary<String, Any>,
-                                let serviceTypeName = attributes["service_type_name"] as? String,
-                                let shortDates = attributes["short_dates"] as? String,
-                                let teamName = attributes["team_name"] as? String,
-                                let relationships = sched["relationships"] as? Dictionary<String, Any>,
-                                let plan = relationships["plan"] as? Dictionary<String, Any>,
-                                let planData = plan["data"] as? Dictionary<String, Any>,
-                                let planID = planData["id"] as? String,
-                                let service = relationships["service_type"] as? Dictionary<String, Any>,
-                                let serviceData = service["data"] as? Dictionary<String, Any>,
-                                let serviceTypeID = serviceData["id"] as? String {
-                                print("Schedule Data: \(schedID):SType=\(serviceTypeID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
-                                let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceTypeID: serviceTypeID, serviceTypeName: serviceTypeName)
-                                self.scheduledPlans.append(scheduledPlan)
-                                
-                                DispatchQueue.main.async {
-                                    self.spinner.stopAnimating()
-                                    self.spinner.isHidden = true
-                                    self.tableView.reloadData()
+                        let itemData = jsonResult["data"] as? [Any] {
+                        for item in itemData {
+                            if let item = item as? Dictionary<String, Any>,
+                                let itemID = item["id"] as? String,
+                                let attributes = item["attributes"] as? Dictionary<String, Any>,
+                                let itemType = attributes["item_type"] as? String,
+                                let title = attributes["title"] as? String,
+                                let keyName = attributes["key_name"] as? String,
+                                let sequence = attributes["sequence"] as? Int {
+                                if itemType == "song" {
+                                    print("Item ID: \(itemID):Seq \(sequence):Title \(title)")
+                                    let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
+                                    self.songItems.append(songItem)
+
                                 }
                                 
                             }
+                        }
+                        DispatchQueue.main.async {
+                            self.spinner.stopAnimating()
+                            self.spinner.isHidden = true
+                            self.tableView.reloadData()
                         }
                     }
                 }
         })
     }
+    
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for:indexPath)
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let label = cell.viewWithTag(1000) as! UILabel
+        let detailLabel = cell.viewWithTag(1001) as! UILabel
+        
+        let song = self.songItems[indexPath.row]
+        
+        label.text = song.title
+        detailLabel.text = "Item ID: " + song.itemID + ", Key: " + song.keyName + ", Seq: " + String(song.sequence)
+        
         return cell
+
     }
-    */
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.songItems.count
+    }
+
 
     /*
     // Override to support conditional editing of the table view.

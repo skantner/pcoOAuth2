@@ -41,6 +41,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidAppear(animated)
         
         getPlanSongs()
+        
+        // https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970735/items/477960249/attachments
     }
     
     func getPlanSongs() {

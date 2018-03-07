@@ -11,14 +11,14 @@ import AeroGearHttp
 import AeroGearOAuth2
 
 class SongItemsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
 
     var planID = ""
     var serviceTypeID = ""
     var serviceTypeName = ""
     var schedDate = ""
-    var http = Http()
     var songItems = [SongItem]()
+    var observer: Any!
+    var authzModule: AuthzModule!
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -29,23 +29,61 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         print ("PlanID:\(planID):ServiceTypeID:\(serviceTypeID):ServiceTypeName:\(serviceTypeName)")
         self.navigationItem.title = self.schedDate
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         getPlanSongs()
-        
-        // https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970735/items/477960249/attachments
+    }
+
+    func getSongAttachments() {
+
+        for song in songItems {
+            let http = Http()
+            http.authzModule = self.authzModule
+            http.request(method: .get,
+                         path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/attachments",
+                completionHandler: {(response, error) in
+                    if (error != nil) {
+                        print("Error -> \(error!.localizedDescription)")
+                    } else {
+                        if let jsonResult = response as? Dictionary<String, Any>,
+                            let attachmentData = jsonResult["data"] as? [Any] {
+                            for attachment in attachmentData {
+                                if let attachment = attachment as? Dictionary<String, Any>,
+                                    let attachmentID = attachment["id"] as? String,
+                                    let attributes = attachment["attributes"] as? Dictionary<String, Any>,
+                                    let contentType = attributes["content_type"] as? String,
+                                    let filename = attributes["filename"] as? String,
+                                    let url = attributes["url"] as? String {
+                                    if contentType == "application/pdf" {
+                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
+//                                        let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
+//                                        self.songItems.append(songItem)
+                                        song.attachments += 1
+                                    }
+                                }
+                            }
+                            DispatchQueue.main.async {
+                                let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
+                                v?.stopAnimating()
+                                self.tableView.reloadData()
+                            }
+                        }
+                    }
+            })
+        }
     }
     
     func getPlanSongs() {
+        
+        let http = Http()
+        http.authzModule = self.authzModule
         
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items",
@@ -67,15 +105,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     print("Item ID: \(itemID):Seq \(sequence):Title \(title)")
                                     let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
                                     self.songItems.append(songItem)
-
                                 }
-                                
                             }
                         }
                         DispatchQueue.main.async {
                             self.spinner.stopAnimating()
                             self.spinner.isHidden = true
                             self.tableView.reloadData()
+                            self.getSongAttachments()
                         }
                     }
                 }
@@ -92,11 +129,25 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let song = self.songItems[indexPath.row]
         
+        var attachments = ""
+        
         label.text = song.title
-        detailLabel.text = "Item ID: " + song.itemID + ", Key: " + song.keyName + ", Seq: " + String(song.sequence)
+        if song.attachments > 0 {
+            attachments = String(song.attachments)
+        } else {
+            attachments = "-"
+        }
+        detailLabel.text = "Item ID: " + song.itemID + ", Key: " + song.keyName + ", Seq: " + String(song.sequence) + ", Attachments: " + attachments
+        
+        if cell.accessoryView == nil {
+            let ai = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+            ai.startAnimating()
+            cell.accessoryView = ai
+        }
+        
+        cell.accessoryView?.tag = 1000 + song.sequence
         
         return cell
-
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -154,6 +205,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     */
 
     // MARK: - Housekeeping
+    
+    deinit {
+        print("*** deinit \(self)")
+        NotificationCenter.default.removeObserver(observer)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

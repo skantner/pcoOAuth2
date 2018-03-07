@@ -210,6 +210,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedPlan = indexPath.row
+        self.tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "ShowPlan", sender: nil)
     }
     
@@ -226,7 +227,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
             planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName
             planVC.schedDate = self.scheduledPlans[selectedPlan].scheduledDate
-            planVC.http = self.http
+            planVC.authzModule = self.http.authzModule
          }
     }
     

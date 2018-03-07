@@ -13,6 +13,7 @@ class SongItem: NSObject {
     var title = ""
     var keyName = ""
     var sequence = 0
+    var attachments = 0
 
     init(itemID : String, title : String, keyName : String, sequence : Int) {
         self.itemID = itemID

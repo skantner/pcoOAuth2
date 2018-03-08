@@ -22,6 +22,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var debugButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidAppear(animated)
         
         getPlanSongs()
+    }
+    
+    @IBAction func debugPressed() {
+//        self.tableView.reloadData()
+        print("Hi")
     }
 
     func getSongAttachments() {
@@ -64,6 +70,39 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     if contentType == "application/pdf" {
                                         print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
                                         let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : url)
+                                        song.attachments.append(a)
+                                    }
+                                }
+                            }
+                        }
+                    }
+            })
+        }
+    }
+    
+    func getArrangementAttachments() {
+
+        for song in songItems {
+            let http = Http()
+            http.authzModule = self.authzModule
+            http.request(method: .get,
+                         path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/arrangement/attachments",
+                completionHandler: {(response, error) in
+                    if (error != nil) {
+                        print("Error -> \(error!.localizedDescription)")
+                    } else {
+                        if let jsonResult = response as? Dictionary<String, Any>,
+                            let attachmentData = jsonResult["data"] as? [Any] {
+                            for attachment in attachmentData {
+                                if let attachment = attachment as? Dictionary<String, Any>,
+                                    let attachmentID = attachment["id"] as? String,
+                                    let attributes = attachment["attributes"] as? Dictionary<String, Any>,
+                                    let pcoType = attributes["pco_type"] as? String,
+                                    let filename = attributes["filename"] as? String,
+                                    let url = attributes["url"] as? String {
+                                    if pcoType == "AttachmentChart::Lyric" {
+                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : pcoType, url : url)
                                         song.attachments.append(a)
                                     }
                                 }
@@ -108,10 +147,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             }
                         }
                         DispatchQueue.main.async {
-                            self.spinner.stopAnimating()
-                            self.spinner.isHidden = true
                             self.tableView.reloadData()
                             self.getSongAttachments()
+                            self.getArrangementAttachments()
                         }
                     }
                 }

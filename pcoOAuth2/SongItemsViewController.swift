@@ -47,6 +47,44 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         print("Hi")
     }
 
+    func getPlanSongs() {
+        
+        let http = Http()
+        http.authzModule = self.authzModule
+        
+        http.request(method: .get,
+                     path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items",
+            completionHandler: {(response, error) in
+                if (error != nil) {
+                    print("Error -> \(error!.localizedDescription)")
+                } else {
+                    if let jsonResult = response as? Dictionary<String, Any>,
+                        let itemData = jsonResult["data"] as? [Any] {
+                        for item in itemData {
+                            if let item = item as? Dictionary<String, Any>,
+                                let itemID = item["id"] as? String,
+                                let attributes = item["attributes"] as? Dictionary<String, Any>,
+                                let itemType = attributes["item_type"] as? String,
+                                let title = attributes["title"] as? String,
+                                let keyName = attributes["key_name"] as? String,
+                                let sequence = attributes["sequence"] as? Int {
+                                if itemType == "song" {
+                                    print("Item ID: \(itemID):Seq \(sequence):Title \(title)")
+                                    let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
+                                    self.songItems.append(songItem)
+                                }
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            self.getSongAttachments()
+                            self.getArrangementAttachments()
+                        }
+                    }
+                }
+        })
+    }
+    
     func getSongAttachments() {
 
         for song in songItems {
@@ -118,43 +156,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func getPlanSongs() {
-        
-        let http = Http()
-        http.authzModule = self.authzModule
-        
-        http.request(method: .get,
-                     path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items",
-            completionHandler: {(response, error) in
-                if (error != nil) {
-                    print("Error -> \(error!.localizedDescription)")
-                } else {
-                    if let jsonResult = response as? Dictionary<String, Any>,
-                        let itemData = jsonResult["data"] as? [Any] {
-                        for item in itemData {
-                            if let item = item as? Dictionary<String, Any>,
-                                let itemID = item["id"] as? String,
-                                let attributes = item["attributes"] as? Dictionary<String, Any>,
-                                let itemType = attributes["item_type"] as? String,
-                                let title = attributes["title"] as? String,
-                                let keyName = attributes["key_name"] as? String,
-                                let sequence = attributes["sequence"] as? Int {
-                                if itemType == "song" {
-                                    print("Item ID: \(itemID):Seq \(sequence):Title \(title)")
-                                    let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
-                                    self.songItems.append(songItem)
-                                }
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            self.getSongAttachments()
-                            self.getArrangementAttachments()
-                        }
-                    }
-                }
-        })
-    }
+ 
     
     // MARK: - Table view data source
 

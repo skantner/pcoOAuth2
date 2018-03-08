@@ -78,7 +78,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                             self.getSongAttachments()
-                            self.getArrangementAttachments()
                         }
                     }
                 }
@@ -87,6 +86,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func getSongAttachments() {
 
+        let totalSongs = songItems.count
+        var count = 0
+        
         for song in songItems {
             let http = Http()
             http.authzModule = self.authzModule
@@ -114,12 +116,21 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             }
                         }
                     }
+                    count += 1
+                    if count == totalSongs {
+                        DispatchQueue.main.async {
+                            self.getArrangementAttachments()
+                        }
+                    }
             })
         }
     }
     
     func getArrangementAttachments() {
 
+        let totalSongs = songItems.count
+        var count = 0
+        
         for song in songItems {
             let http = Http()
             http.authzModule = self.authzModule
@@ -145,11 +156,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     }
                                 }
                             }
-                            DispatchQueue.main.async {
-                                let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
-                                v?.stopAnimating()
-                                self.tableView.reloadData()
-                            }
+                        }
+                    }
+                    count += 1
+                    if count == totalSongs {
+                        DispatchQueue.main.async {
+                            let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
+                            v?.stopAnimating()
+                            self.tableView.reloadData()
                         }
                     }
             })
@@ -195,7 +209,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return self.songItems.count
     }
 
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = self.songItems[indexPath.row]
+        self.tableView.deselectRow(at: indexPath, animated: true)
+        for a in song.attachments {
+            print("name:\(a.filename) url:\(a.url)")
+        }
+        //        performSegue(withIdentifier: "ShowPlan", sender: nil)
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

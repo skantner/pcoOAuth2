@@ -63,9 +63,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let url = attributes["url"] as? String {
                                     if contentType == "application/pdf" {
                                         print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
-//                                        let songItem = SongItem(itemID : itemID, title : title, keyName : keyName, sequence : sequence)
-//                                        self.songItems.append(songItem)
-                                        song.attachments += 1
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : url)
+                                        song.attachments.append(a)
                                     }
                                 }
                             }
@@ -132,8 +131,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         var attachments = ""
         
         label.text = song.title
-        if song.attachments > 0 {
-            attachments = String(song.attachments)
+        if song.attachments.count > 0 {
+            attachments = String(song.attachments.count)
         } else {
             attachments = "-"
         }
@@ -208,7 +207,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     deinit {
         print("*** deinit \(self)")
-        NotificationCenter.default.removeObserver(observer)
+//        NotificationCenter.default.removeObserver(observer)
     }
     
     override func didReceiveMemoryWarning() {

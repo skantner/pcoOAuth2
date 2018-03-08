@@ -43,7 +43,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func debugPressed() {
-//        self.tableView.reloadData()
+        self.tableView.reloadData()
         print("Hi")
     }
 
@@ -155,8 +155,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             })
         }
     }
-    
- 
     
     // MARK: - Table view data source
 

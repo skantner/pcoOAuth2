@@ -17,6 +17,7 @@
 		775FD422203B0723008DDC49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775FD421203B0723008DDC49 /* Assets.xcassets */; };
 		775FD425203B0723008DDC49 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD423203B0723008DDC49 /* LaunchScreen.storyboard */; };
 		77CDA1D8204EC31B00CBA09D /* SongItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */; };
+		77E1A0852052BDC30086CB4A /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */; };
 		77EDEEC4204F240D00BAA527 /* SongItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EDEEC3204F240D00BAA527 /* SongItem.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		775FD424203B0723008DDC49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		775FD426203B0723008DDC49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItemsViewController.swift; sourceTree = "<group>"; };
+		77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
 		77EDEEC3204F240D00BAA527 /* SongItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItem.swift; sourceTree = "<group>"; };
 		F088CAFFDCD94E5A247135E1 /* Pods_pcoOAuth2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pcoOAuth2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				775FD41A203B0723008DDC49 /* AppDelegate.swift */,
+				77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */,
 				77EDEEC3204F240D00BAA527 /* SongItem.swift */,
 				77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */,
 				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
@@ -243,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				775FD41D203B0723008DDC49 /* ViewController.swift in Sources */,
+				77E1A0852052BDC30086CB4A /* AttachmentsViewController.swift in Sources */,
 				770DDB1D204258910083631D /* pcoServiceType.swift in Sources */,
 				7739BC54203BA72E005C1F79 /* SearchResult.swift in Sources */,
 				77EDEEC4204F240D00BAA527 /* SongItem.swift in Sources */,

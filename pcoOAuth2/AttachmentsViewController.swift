@@ -35,8 +35,53 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
         // Dispose of any resources that can be recreated.
     }
     
-    func getPCOAttachment(url : String) {
-        print("\(url)")
+    func test(openUrl : String) {
+//       let url = "https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970735/items/482233555/attachments/46788848/open"
+        let http = Http()
+        http.authzModule = self.authzModule
+        http.request(method: .post,
+                     path: openUrl,
+            completionHandler: {(response, error) in
+                if (error != nil) {
+                    print("Error -> \(error!.localizedDescription)")
+                } else {
+                    print("\(response!)")
+                    if let jsonResult = response as? Dictionary<String, Any>,
+                        let attachmentData = jsonResult["data"] as? Dictionary<String, Any>,
+                        let attributes = attachmentData["attributes"] as? Dictionary<String, Any>,
+                        let attachmentURL = attributes["attachment_url"] as? String {
+                        print("attachmentURL: \(attachmentURL)")
+                        self.getPCOAttachment(attachmentUrl: attachmentURL)
+//                        http.download(url: attachmentURL,
+//                                      method: .post,
+//                                      progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
+//                                        print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
+//                        }, completionHandler: { (response, error) in
+//                            print("Download complete: \(response!)")
+//                        })
+
+                    }
+                }
+        })
+
+    }
+    
+    func getPCOAttachment(attachmentUrl : String) {
+       
+//        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+//        print("\(documents)")
+//        print("\(attachmentUrl)")
+        
+        let http = Http()
+        //http.authzModule = self.authzModule
+        
+        http.download(url: attachmentUrl,
+                      method: .post,
+                      progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
+                        print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
+        }, completionHandler: { (response, error) in
+            print("Download complete: \(response!)")
+        })
     }
     
     // MARK: - Table view delegate
@@ -44,7 +89,8 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let attachment = self.attachmentList[indexPath.row]
-        getPCOAttachment(url: attachment.url)
+        test(openUrl: attachment.url)
+        //getPCOAttachment(attachmentUrl: attachment.url)
     }
     
     // MARK: - Table view data source

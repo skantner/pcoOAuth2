@@ -91,10 +91,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         var count = 0
         
         for song in songItems {
+            let url = "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/attachments"
+            print("\(url)")
+            
             let http = Http()
             http.authzModule = self.authzModule
             http.request(method: .get,
-                         path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/attachments",
+                         path: url,
                 completionHandler: {(response, error) in
                     if (error != nil) {
                         print("Error -> \(error!.localizedDescription)")
@@ -106,11 +109,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let attachmentID = attachment["id"] as? String,
                                     let attributes = attachment["attributes"] as? Dictionary<String, Any>,
                                     let contentType = attributes["content_type"] as? String,
-                                    let filename = attributes["filename"] as? String,
-                                    let url = attributes["url"] as? String {
+                                    let filename = attributes["filename"] as? String {
                                     if contentType == "application/pdf" {
-                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
-                                        let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : url)
+                                        let aurl = url + "/\(attachmentID)/open"
+                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(aurl)")
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : aurl)
                                         song.attachments.append(a)
                                     }
                                 }

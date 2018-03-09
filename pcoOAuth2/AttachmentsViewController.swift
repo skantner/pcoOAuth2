@@ -30,13 +30,7 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
         self.songTitleLabel.text = self.songTitle
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func test(openUrl : String) {
-//       let url = "https://api.planningcenteronline.com/services/v2/service_types/541380/plans/34970735/items/482233555/attachments/46788848/open"
+    func getPCOAttachment(openUrl : String, fileName: String) {
         let http = Http()
         http.authzModule = self.authzModule
         http.request(method: .post,
@@ -45,42 +39,22 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
                 if (error != nil) {
                     print("Error -> \(error!.localizedDescription)")
                 } else {
-                    print("\(response!)")
                     if let jsonResult = response as? Dictionary<String, Any>,
                         let attachmentData = jsonResult["data"] as? Dictionary<String, Any>,
                         let attributes = attachmentData["attributes"] as? Dictionary<String, Any>,
-                        let attachmentURL = attributes["attachment_url"] as? String {
-                        print("attachmentURL: \(attachmentURL)")
-                        self.getPCOAttachment(attachmentUrl: attachmentURL)
-//                        http.download(url: attachmentURL,
-//                                      method: .post,
-//                                      progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
-//                                        print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
-//                        }, completionHandler: { (response, error) in
+                        let attachmentUrl = attributes["attachment_url"] as? String {
+                        print("Downloading \(fileName)...")
+                        let s3http = Http()
+                        s3http.download(url: attachmentUrl,
+                                      method: .get,
+                                      progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
+                                        print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
+                        }, completionHandler: { (response, error) in
 //                            print("Download complete: \(response!)")
-//                        })
-
+                            print("Download complete.")
+                        })
                     }
                 }
-        })
-
-    }
-    
-    func getPCOAttachment(attachmentUrl : String) {
-       
-//        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-//        print("\(documents)")
-//        print("\(attachmentUrl)")
-        
-        let http = Http()
-        //http.authzModule = self.authzModule
-        
-        http.download(url: attachmentUrl,
-                      method: .post,
-                      progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
-                        print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
-        }, completionHandler: { (response, error) in
-            print("Download complete: \(response!)")
         })
     }
     
@@ -89,19 +63,16 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         let attachment = self.attachmentList[indexPath.row]
-        test(openUrl: attachment.url)
-        //getPCOAttachment(attachmentUrl: attachment.url)
+        getPCOAttachment(openUrl: attachment.url, fileName: attachment.filename)
     }
     
     // MARK: - Table view data source
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "AttachmentCell", for:indexPath)
-        
         let label = cell.viewWithTag(1000) as! UILabel
-        
         let attachment = self.attachmentList[indexPath.row]
-        
         label.text = attachment.filename
         
         return cell
@@ -125,5 +96,10 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    // MARK: - Houskeeping
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
 }

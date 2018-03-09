@@ -92,7 +92,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         for song in songItems {
             let url = "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/attachments"
-            print("\(url)")
             
             let http = Http()
             http.authzModule = self.authzModule
@@ -112,7 +111,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let filename = attributes["filename"] as? String {
                                     if contentType == "application/pdf" {
                                         let aurl = url + "/\(attachmentID)/open"
-                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(aurl)")
+//                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(aurl)")
                                         let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : aurl)
                                         song.attachments.append(a)
                                     }
@@ -136,10 +135,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         var count = 0
         
         for song in songItems {
+            let url = "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/arrangement/attachments"
             let http = Http()
             http.authzModule = self.authzModule
             http.request(method: .get,
-                         path: "https://api.planningcenteronline.com/services/v2/service_types/\(self.serviceTypeID)/plans/\(self.planID)/items/\(song.itemID)/arrangement/attachments",
+                         path: url,
                 completionHandler: {(response, error) in
                     if (error != nil) {
                         print("Error -> \(error!.localizedDescription)")
@@ -151,11 +151,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let attachmentID = attachment["id"] as? String,
                                     let attributes = attachment["attributes"] as? Dictionary<String, Any>,
                                     let pcoType = attributes["pco_type"] as? String,
-                                    let filename = attributes["filename"] as? String,
-                                    let url = attributes["url"] as? String {
+                                    let filename = attributes["filename"] as? String {
                                     if pcoType == "AttachmentChart::Lyric" {
-                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(url)")
-                                        let a = Attachment(id : attachmentID, filename : filename, contentType : pcoType, url : url)
+                                        let aurl = url + "/\(attachmentID)/open"
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : pcoType, url : aurl)
                                         song.attachments.append(a)
                                     }
                                 }
@@ -192,6 +191,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             attachments = "-"
         }
+        
         detailLabel.text = "Item ID: " + song.itemID + ", Key: " + song.keyName + ", Seq: " + String(song.sequence) + ", Attachments: " + attachments
         
         if cell.accessoryView == nil {

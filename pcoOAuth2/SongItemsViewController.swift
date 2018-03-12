@@ -20,6 +20,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     var observer: Any!
     var authzModule: AuthzModule!
     var selectedSongIndex = NSNotFound
+    var didGetSongs = false
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -40,7 +41,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        getPlanSongs()
+        if !didGetSongs {
+            getPlanSongs()
+        }
     }
     
     @IBAction func debugPressed() {
@@ -79,6 +82,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                             self.getSongAttachments()
+                            self.didGetSongs = true
                         }
                     }
                 }

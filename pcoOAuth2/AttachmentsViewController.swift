@@ -21,7 +21,8 @@ class AttachmentsViewController: UIViewController, UITableViewDelegate, UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        print("Documents dir:\(documentsURL)")
         // Do any additional setup after loading the view.
     }
     

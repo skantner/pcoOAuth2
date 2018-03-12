@@ -10,7 +10,7 @@ import UIKit
 import AeroGearHttp
 import AeroGearOAuth2
 
-class SongItemsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SongItemsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
     var planID = ""
     var serviceTypeID = ""
@@ -21,11 +21,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     var authzModule: AuthzModule!
     var selectedSongIndex = NSNotFound
     var didGetSongs = false
-    
+    let itemsPerRow: CGFloat = 5
+    let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var debugButton: UIButton!
-    
+    @IBOutlet weak var leadSwitch: UISwitch!
+    @IBOutlet weak var chordSwitch: UISwitch!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = UIColor.white
@@ -45,10 +48,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             getPlanSongs()
         }
     }
-    
-    @IBAction func debugPressed() {
-        self.tableView.reloadData()
-        print("Hi")
+
+    @IBAction func chordsSwitchChanged(_ sender: Any) {
+    }
+    @IBAction func leadSwitchChanged(_ sender: Any) {
     }
 
     func getPlanSongs() {
@@ -220,9 +223,27 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.selectedSongIndex = indexPath.row
-        performSegue(withIdentifier: "ShowAttachments", sender: nil)
+  //      performSegue(withIdentifier: "ShowAttachments", sender: nil)
     }
 
+    // MARK: - CollectionView
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 9
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttachmentCell",
+                                                      for: indexPath)
+        cell.backgroundColor = UIColor.black
+        
+        return cell
+    }
+    
     //MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -249,7 +270,32 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+}
+
+extension SongItemsViewController : UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        
+        return CGSize(width: widthPerItem, height: widthPerItem)
     }
     
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
+    }
 }
+

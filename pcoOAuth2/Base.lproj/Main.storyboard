@@ -213,10 +213,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
-                                                    <rect key="frame" x="4" y="5" width="41" height="41"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
+                                                    <rect key="frame" x="4" y="5" width="41" height="11"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="41" id="COK-Hn-oaa"/>
                                                         <constraint firstAttribute="width" constant="41" id="P9J-lR-sTf"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="9"/>
@@ -227,6 +226,7 @@
                                         </view>
                                         <constraints>
                                             <constraint firstItem="7xu-2F-r7T" firstAttribute="top" secondItem="y4o-aF-bcX" secondAttribute="top" constant="5" id="LYi-4I-1Am"/>
+                                            <constraint firstAttribute="trailing" secondItem="7xu-2F-r7T" secondAttribute="trailing" constant="5" id="VNC-bf-Sq7"/>
                                             <constraint firstItem="7xu-2F-r7T" firstAttribute="leading" secondItem="y4o-aF-bcX" secondAttribute="leading" constant="4" id="Xkh-Yb-DnY"/>
                                         </constraints>
                                     </collectionViewCell>

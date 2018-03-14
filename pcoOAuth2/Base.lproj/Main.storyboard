@@ -75,7 +75,7 @@
                                 <rect key="frame" x="16" y="220" width="802" height="872"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" textLabel="uUD-Jd-5MZ" detailTextLabel="Rij-wg-vNg" style="IBUITableViewCellStyleSubtitle" id="TPJ-oG-p93">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" textLabel="uUD-Jd-5MZ" detailTextLabel="Rij-wg-vNg" style="IBUITableViewCellStyleSubtitle" id="TPJ-oG-p93">
                                         <rect key="frame" x="0.0" y="28" width="802" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TPJ-oG-p93" id="5FP-MI-MQl">
@@ -212,7 +212,23 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
+                                                    <rect key="frame" x="4" y="5" width="41" height="41"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="41" id="COK-Hn-oaa"/>
+                                                        <constraint firstAttribute="width" constant="41" id="P9J-lR-sTf"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="7xu-2F-r7T" firstAttribute="top" secondItem="y4o-aF-bcX" secondAttribute="top" constant="5" id="LYi-4I-1Am"/>
+                                            <constraint firstItem="7xu-2F-r7T" firstAttribute="leading" secondItem="y4o-aF-bcX" secondAttribute="leading" constant="4" id="Xkh-Yb-DnY"/>
+                                        </constraints>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -285,6 +301,7 @@
                     </view>
                     <connections>
                         <outlet property="chordSwitch" destination="oFN-8c-sGH" id="pQY-Vy-zt2"/>
+                        <outlet property="collectionView" destination="KgL-6U-kA3" id="hGq-rE-0yF"/>
                         <outlet property="leadSwitch" destination="ZDz-3J-led" id="3Sj-SM-e2p"/>
                         <outlet property="spinner" destination="YTy-JL-tj2" id="4sz-v9-yhR"/>
                         <outlet property="tableView" destination="eqo-td-GXq" id="FCo-Hh-Xcn"/>

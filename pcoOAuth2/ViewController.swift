@@ -171,9 +171,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                         let service = relationships["service_type"] as? Dictionary<String, Any>,
                                         let serviceData = service["data"] as? Dictionary<String, Any>,
                                         let serviceTypeID = serviceData["id"] as? String {
-                                            print("Schedule Data: \(schedID):SType=\(serviceTypeID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
-                                        let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceTypeID: serviceTypeID, serviceTypeName: serviceTypeName)
-                                        self.scheduledPlans.append(scheduledPlan)
+                                            if !self.planFound(planID: planID) {
+                                                print("Schedule Data: \(schedID):SType=\(serviceTypeID):\(serviceTypeName) : \(shortDates) : \(teamName) : Plan ID = \(planID)")
+                                            let scheduledPlan = ScheduledPlan(planID: planID, schedDate: shortDates, serviceTypeID: serviceTypeID, serviceTypeName: serviceTypeName)
+                                            self.scheduledPlans.append(scheduledPlan)
+                                        }
                                         
                                         DispatchQueue.main.async {
                                             self.spinner.stopAnimating()
@@ -188,6 +190,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
     }
 
+    func planFound(planID : String) -> Bool {
+
+        var found = false
+        
+        for plan in self.scheduledPlans {
+            found = plan.planID == planID
+            if found {break}
+        }
+        
+        return found
+    }
+    
     //MARK: - TableView methods
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

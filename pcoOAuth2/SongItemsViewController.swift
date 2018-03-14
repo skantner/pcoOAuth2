@@ -25,6 +25,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var leadSwitch: UISwitch!
     @IBOutlet weak var chordSwitch: UISwitch!
@@ -174,6 +175,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
                             v?.stopAnimating()
                             self.tableView.reloadData()
+                            self.collectionView.reloadData()
                         }
                     }
             })
@@ -229,17 +231,21 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - CollectionView
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 5
+        return self.songItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
+        return self.songItems[section].attachments.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AttachmentCell",
                                                       for: indexPath)
-        cell.backgroundColor = UIColor.black
+        cell.backgroundColor = UIColor.lightGray
+        let song = self.songItems[indexPath.section]
+        let attachment = song.attachments[indexPath.row]
+        let label = cell.viewWithTag(2000) as! UILabel
+        label.text = attachment.filename
         
         return cell
     }

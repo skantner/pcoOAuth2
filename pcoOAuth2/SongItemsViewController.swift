@@ -224,6 +224,16 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return self.songItems.count
     }
 
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var title = ""
+        
+        if section == 0 {
+            title = "PCO Set List"
+        }
+        
+        return title
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.selectedSongIndex = indexPath.row

@@ -16,6 +16,7 @@
 		775FD420203B0723008DDC49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD41E203B0723008DDC49 /* Main.storyboard */; };
 		775FD422203B0723008DDC49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775FD421203B0723008DDC49 /* Assets.xcassets */; };
 		775FD425203B0723008DDC49 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD423203B0723008DDC49 /* LaunchScreen.storyboard */; };
+		77A32A872059F42C003A3BF8 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A32A862059F42C003A3BF8 /* AttachmentCell.swift */; };
 		77CDA1D8204EC31B00CBA09D /* SongItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */; };
 		77E1A0852052BDC30086CB4A /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */; };
 		77EDEEC4204F240D00BAA527 /* SongItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EDEEC3204F240D00BAA527 /* SongItem.swift */; };
@@ -34,6 +35,7 @@
 		775FD421203B0723008DDC49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		775FD424203B0723008DDC49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		775FD426203B0723008DDC49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		77A32A862059F42C003A3BF8 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItemsViewController.swift; sourceTree = "<group>"; };
 		77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
 		77EDEEC3204F240D00BAA527 /* SongItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItem.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				775FD41A203B0723008DDC49 /* AppDelegate.swift */,
+				77A32A862059F42C003A3BF8 /* AttachmentCell.swift */,
 				77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */,
 				77EDEEC3204F240D00BAA527 /* SongItem.swift */,
 				77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */,
@@ -251,6 +254,7 @@
 				7739BC54203BA72E005C1F79 /* SearchResult.swift in Sources */,
 				77EDEEC4204F240D00BAA527 /* SongItem.swift in Sources */,
 				7741363E204DBE9900739346 /* ScheduledPlan.swift in Sources */,
+				77A32A872059F42C003A3BF8 /* AttachmentCell.swift in Sources */,
 				77CDA1D8204EC31B00CBA09D /* SongItemsViewController.swift in Sources */,
 				775FD41B203B0723008DDC49 /* AppDelegate.swift in Sources */,
 			);

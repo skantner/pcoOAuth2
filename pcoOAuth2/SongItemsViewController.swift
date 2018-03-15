@@ -250,6 +250,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
+
     func collectionView(_ collectionView: UICollectionView,
                                  didSelectItemAt indexPath: IndexPath) {
         print ("Hi from \(indexPath.section):\(indexPath.row)")

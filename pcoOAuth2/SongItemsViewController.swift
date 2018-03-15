@@ -36,6 +36,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         print ("PlanID:\(planID):ServiceTypeID:\(serviceTypeID):ServiceTypeName:\(serviceTypeName)")
         self.navigationItem.title = self.schedDate
+        
+        self.collectionView.allowsMultipleSelection = true
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -236,6 +238,21 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.songItems[section].attachments.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                                 viewForSupplementaryElementOfKind kind: String,
+                                 at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+            case UICollectionElementKindSectionHeader:
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                                 withReuseIdentifier: "SongHeaderView",
+                                                                                 for: indexPath) as! SongHeaderView
+                headerView.titleLabel.text = songItems[(indexPath as NSIndexPath).section].title
+                return headerView
+            default:
+                assert(false, "Unexpected element kind")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

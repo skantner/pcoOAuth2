@@ -24,7 +24,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     let itemsPerRow: CGFloat = 5
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var pcoTableView: UITableView!
+    @IBOutlet weak var npSongTableView: UITableView!
+    @IBOutlet weak var newSetTableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var leadSwitch: UISwitch!
@@ -86,7 +88,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             }
                         }
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.pcoTableView.reloadData()
                             self.getSongAttachments()
                             self.didGetSongs = true
                         }
@@ -176,7 +178,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         DispatchQueue.main.async {
                             let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
                             v?.stopAnimating()
-                            self.tableView.reloadData()
+                            self.pcoTableView.reloadData()
                             self.collectionView.reloadData()
                         }
                     }
@@ -221,23 +223,41 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.songItems.count
+        
+        switch tableView {
+        case self.pcoTableView:
+            return self.songItems.count
+        default:
+            return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title = ""
-        
+
         if section == 0 {
-            title = "PCO Set List"
+            switch tableView {
+            case self.pcoTableView:
+                title = "PCO Set List"
+            case self.newSetTableView:
+                title = "New Set"
+            case self.npSongTableView:
+                title = "NextPage Song List"
+                default:
+                title = ""
+            }
         }
-        
+
         return title
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
-        self.selectedSongIndex = indexPath.row
-  //      performSegue(withIdentifier: "ShowAttachments", sender: nil)
+        
+        if tableView == self.pcoTableView {
+            self.pcoTableView.deselectRow(at: indexPath, animated: true)
+            self.selectedSongIndex = indexPath.row
+      //      performSegue(withIdentifier: "ShowAttachments", sender: nil)
+        }
     }
 
     // MARK: - CollectionView

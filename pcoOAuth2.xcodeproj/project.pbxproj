@@ -81,6 +81,7 @@
 				77A32A862059F42C003A3BF8 /* AttachmentCell.swift */,
 				77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */,
 				77EDEEC3204F240D00BAA527 /* SongItem.swift */,
+				77D21697205A995F00C26F75 /* SongHeaderView.swift */,
 				77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */,
 				7741363D204DBE9900739346 /* ScheduledPlan.swift */,
 				775FD41C203B0723008DDC49 /* ViewController.swift */,
@@ -89,7 +90,6 @@
 				775FD426203B0723008DDC49 /* Info.plist */,
 				77EDEEC2204EF63800BAA527 /* Scrap */,
 				775FD421203B0723008DDC49 /* Assets.xcassets */,
-				77D21697205A995F00C26F75 /* SongHeaderView.swift */,
 			);
 			path = pcoOAuth2;
 			sourceTree = "<group>";

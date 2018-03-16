@@ -272,7 +272,17 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         let song = self.songItems[indexPath.section]
         let attachment = song.attachments[indexPath.row]
         let label = cell.viewWithTag(2000) as! UILabel
-        label.text = attachment.filename
+        let filename = attachment.filename
+        label.text = filename
+        let imgView = cell.viewWithTag(2001) as! UIImageView
+        
+        if filename.lowercased().range(of:"lead") != nil {
+            imgView.image = UIImage(named:"pco_lead")
+        } else if filename.lowercased().range(of:"chord") != nil {
+            imgView.image = UIImage(named:"pco_chords")
+        } else {
+            imgView.image = UIImage(named:"pco_lyrics")
+        }
         
         return cell
     }

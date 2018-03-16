@@ -265,6 +265,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <imageView userInteractionEnabled="NO" tag="2001" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rOv-Dg-eyp">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
                                                     <rect key="frame" x="4" y="5" width="42" height="11"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="9"/>
@@ -274,9 +277,13 @@
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="rOv-Dg-eyp" secondAttribute="bottom" id="37p-v1-I29"/>
                                             <constraint firstItem="7xu-2F-r7T" firstAttribute="leading" secondItem="y4o-aF-bcX" secondAttribute="leading" constant="4" id="PQg-Yl-NGP"/>
                                             <constraint firstAttribute="trailing" secondItem="7xu-2F-r7T" secondAttribute="trailing" constant="4" id="UWj-hv-Tdo"/>
+                                            <constraint firstItem="rOv-Dg-eyp" firstAttribute="top" secondItem="y4o-aF-bcX" secondAttribute="top" id="VX0-LG-k09"/>
+                                            <constraint firstAttribute="trailing" secondItem="rOv-Dg-eyp" secondAttribute="trailing" id="fxo-GN-yXv"/>
                                             <constraint firstItem="7xu-2F-r7T" firstAttribute="top" secondItem="y4o-aF-bcX" secondAttribute="top" constant="5" id="lCe-4z-aWH"/>
+                                            <constraint firstItem="rOv-Dg-eyp" firstAttribute="leading" secondItem="y4o-aF-bcX" secondAttribute="leading" id="x9h-nK-pee"/>
                                         </constraints>
                                     </collectionViewCell>
                                 </cells>

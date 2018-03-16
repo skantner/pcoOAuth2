@@ -10,13 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "pcoOAuth2/SongItemsViewController.swift"
-            timestampString = "542835575.659371"
+            timestampString = "542896078.337886"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
-            landmarkName = "deinit"
-            landmarkType = "7">
+            startingLineNumber = "324"
+            endingLineNumber = "324"
+            landmarkName = "SongItemsViewController"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

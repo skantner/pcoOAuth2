@@ -15,6 +15,7 @@ class SongItem: NSObject {
     var keyName = ""
     var sequence = 0
     var attachments = [Attachment]()
+    var isInNewSetList = false
 
     init(itemID : String, title : String, keyName : String, sequence : Int) {
         self.itemID = itemID

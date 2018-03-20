@@ -23,6 +23,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     var didGetSongs = false
     let itemsPerRow: CGFloat = 5
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+    var npSongList = [String]()
+    var newSetList = [String]()
 
     @IBOutlet weak var pcoTableView: UITableView!
     @IBOutlet weak var npSongTableView: UITableView!
@@ -40,6 +42,17 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.navigationItem.title = self.schedDate
         
         self.collectionView.allowsMultipleSelection = true
+        
+        npSongList.append("Fullness")
+        npSongList.append("Here In The Presence-B (LEAD)")
+        npSongList.append("Here In The Presence-B (CHORDS)")
+        newSetList.append("Death Was Arreseted")
+        
+        npSongTableView.estimatedRowHeight = 44.0
+        npSongTableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.leadSwitch.isOn = true
+        self.chordSwitch.isOn = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -55,10 +68,55 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     @IBAction func chordsSwitchChanged(_ sender: Any) {
+        let sw = sender as! UISwitch
+        if sw.isOn {
+            self.leadSwitch.setOn(false, animated: true)
+        }
     }
+    
     @IBAction func leadSwitchChanged(_ sender: Any) {
+        let sw = sender as! UISwitch
+        if sw.isOn {
+            self.chordSwitch.setOn(false, animated: true)
+        }
     }
 
+    func buildNewSetList() {
+        newSetList.removeAll()
+        for song in self.songItems {
+            song.isInNewSetList = false
+        }
+        var scoreType = ""
+        if self.chordSwitch.isOn {
+            scoreType = "(CHORDS)"
+        } else if self.leadSwitch.isOn {
+            scoreType = "(LEAD)"
+        }
+        for song in self.songItems {
+            for np in self.npSongList {
+                var testTitle = ""
+                if scoreType != "" {
+                    testTitle = song.title + "-\(song.keyName) \(scoreType)"
+                }
+                if np == song.title {
+                    self.newSetList.append(np)
+                    song.isInNewSetList = true
+                } else if np == testTitle {
+                    self.newSetList.append(np)
+                    song.isInNewSetList = true
+
+                }
+            }
+
+        }
+        // Make selections based on setting of Leads or Chords switches
+        // 1. Look for matches in NextPage Song List and add hits
+        // 2. Look for attachments and add to new set highlighed in blue, and select in CollectionView
+        // 3. refresh table
+        
+        self.newSetTableView.reloadData()
+    }
+    
     func getPlanSongs() {
         
         let http = Http()
@@ -180,6 +238,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             v?.stopAnimating()
                             self.pcoTableView.reloadData()
                             self.collectionView.reloadData()
+                            self.buildNewSetList()
                         }
                     }
             })
@@ -189,8 +248,20 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for:indexPath)
 
+        switch tableView {
+        case self.newSetTableView:
+            return newSetTableViewCell(tableView, cellForRowAt: indexPath)
+        case self.npSongTableView:
+            return npSongTableViewCell(tableView, cellForRowAt: indexPath)
+        default:
+            return pcoTableViewCell(tableView, cellForRowAt: indexPath)
+        }
+    }
+    
+    func pcoTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for:indexPath)
+        
         let label = cell.viewWithTag(1000) as! UILabel
         let detailLabel = cell.viewWithTag(1001) as! UILabel
         
@@ -218,6 +289,31 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
 
+    func newSetTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewSetCell", for:indexPath)
+
+        let label = cell.viewWithTag(1000) as! UILabel
+        
+        let newEntry = self.newSetList[indexPath.row]
+        
+        label.text = newEntry
+
+        return cell
+    }
+
+    func npSongTableViewCell(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NPSongCell", for:indexPath)
+
+        let label = cell.viewWithTag(1000) as! UILabel
+        
+        let npSong = self.npSongList[indexPath.row]
+        
+        label.text = npSong
+
+        return cell
+    }
+
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -227,6 +323,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         switch tableView {
         case self.pcoTableView:
             return self.songItems.count
+        case self.newSetTableView:
+            return self.newSetList.count
+        case self.npSongTableView:
+            return self.npSongList.count
         default:
             return 0
         }

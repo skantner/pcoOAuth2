@@ -33,7 +33,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var leadSwitch: UISwitch!
     @IBOutlet weak var chordSwitch: UISwitch!
-
+    @IBOutlet weak var createSetListButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = UIColor.white
@@ -53,9 +54,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.leadSwitch.isOn = true
         self.chordSwitch.isOn = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.createSetListButton.isEnabled = false
+        
     }
 
     
@@ -93,21 +93,39 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             scoreType = "(LEAD)"
         }
         for song in self.songItems {
+            var testTitle = ""
+            if scoreType != "" {
+                testTitle = song.title + "-\(song.keyName) \(scoreType)"
+            }
             for np in self.npSongList {
-                var testTitle = ""
-                if scoreType != "" {
-                    testTitle = song.title + "-\(song.keyName) \(scoreType)"
-                }
                 if np == song.title {
                     self.newSetList.append(np)
                     song.isInNewSetList = true
                 } else if np == testTitle {
                     self.newSetList.append(np)
                     song.isInNewSetList = true
-
+                }
+                if song.isInNewSetList { break }
+            }
+            if song.isInNewSetList {
+                continue
+            } else {
+                if scoreType != "" {
+                    for a in song.attachments {
+                        if a.filename.range(of: scoreType) != nil {
+                            self.newSetList.append(testTitle)
+                            song.isInNewSetList = true
+                            break
+                        }
+                    }
+                } else {
+                    if song.attachments.count > 0 {
+                        let name = song.attachments.first?.filename
+                        self.newSetList.append(name!)
+                        song.isInNewSetList = true
+                    }
                 }
             }
-
         }
         // Make selections based on setting of Leads or Chords switches
         // 1. Look for matches in NextPage Song List and add hits
@@ -115,6 +133,17 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         // 3. refresh table
         
         self.newSetTableView.reloadData()
+        
+        var enable = true
+        
+        for song in self.songItems {
+            if !song.isInNewSetList {
+                enable = false
+                break
+            }
+        }
+
+        self.createSetListButton.isEnabled = enable
     }
     
     func getPlanSongs() {

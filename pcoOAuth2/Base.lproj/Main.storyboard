@@ -308,7 +308,7 @@
                                                 <imageView userInteractionEnabled="NO" tag="2001" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rOv-Dg-eyp">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7xu-2F-r7T">
                                                     <rect key="frame" x="4" y="5" width="42" height="11"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                                     <nil key="textColor"/>
@@ -381,6 +381,7 @@
                     <connections>
                         <outlet property="chordSwitch" destination="oFN-8c-sGH" id="pQY-Vy-zt2"/>
                         <outlet property="collectionView" destination="KgL-6U-kA3" id="hGq-rE-0yF"/>
+                        <outlet property="createSetListButton" destination="0aY-0p-lmu" id="9t3-Gq-n3x"/>
                         <outlet property="leadSwitch" destination="ZDz-3J-led" id="3Sj-SM-e2p"/>
                         <outlet property="newSetTableView" destination="jhN-0a-aG3" id="30I-SM-u62"/>
                         <outlet property="npSongTableView" destination="IzR-Az-xye" id="xrf-zS-HpV"/>

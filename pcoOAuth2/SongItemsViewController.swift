@@ -305,7 +305,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             attachments = "-"
         }
         
-        detailLabel.text = "Item ID: " + song.itemID + ", Key: " + song.keyName + ", Seq: " + String(song.sequence) + ", Attachments: " + attachments
+        detailLabel.text = "Key: " + song.keyName + ", Seq: " + String(song.sequence) + ", Attachments: " + attachments
         
         if cell.accessoryView == nil {
             let ai = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)

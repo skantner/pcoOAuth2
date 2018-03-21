@@ -43,3 +43,16 @@ class Attachment: NSObject {
         super.init()
     }
 }
+
+class newSetItem: NSObject {
+    
+    var title : String
+    var collectionIndex : IndexPath
+    
+    init(title: String, indexPath: IndexPath) {
+        self.title = title
+        self.collectionIndex = indexPath
+        super.init()
+    }
+    
+}

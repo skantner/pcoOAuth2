@@ -24,7 +24,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     let itemsPerRow: CGFloat = 5
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     var npSongList = [String]()
-    var newSetList = [String]()
+    var newSetList = [NewSetItem]()
 
     @IBOutlet weak var pcoTableView: UITableView!
     @IBOutlet weak var npSongTableView: UITableView!
@@ -47,7 +47,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         npSongList.append("Fullness")
         npSongList.append("Here In The Presence-B (LEAD)")
         npSongList.append("Here In The Presence-B (CHORDS)")
-        newSetList.append("Death Was Arreseted")
         
         npSongTableView.estimatedRowHeight = 44.0
         npSongTableView.rowHeight = UITableViewAutomaticDimension
@@ -97,23 +96,29 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             if scoreType != "" {
                 testTitle = song.title + "-\(song.keyName) \(scoreType)"
             }
-            for np in self.npSongList {
+            for np in self.npSongList {  // look for matches in the NextPage Song List
                 if np == song.title {
-                    self.newSetList.append(np)
+                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0))
+                    self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 } else if np == testTitle {
-                    self.newSetList.append(np)
+                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0))
+                    self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 }
                 if song.isInNewSetList { break }
             }
             if song.isInNewSetList {
                 continue
-            } else {
+            } else { // pick something from the attachments we have in PCO
                 if scoreType != "" {
                     for a in song.attachments {
                         if a.filename.range(of: scoreType) != nil {
-                            self.newSetList.append(testTitle)
+                            let title = String(a.filename.dropLast(4))
+                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0))
+                            self.newSetList.append(newEntry)
+                            // mark attachment in collection view
+                            // colorize cell in newsettable
                             song.isInNewSetList = true
                             break
                         }
@@ -121,7 +126,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                 } else {
                     if song.attachments.count > 0 {
                         let name = song.attachments.first?.filename
-                        self.newSetList.append(name!)
+                        // mark attachment in collection view
+                        // colorize cell in newsettable
+                        let title = String(name!.dropLast(4))
+                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0))
+                        self.newSetList.append(newEntry)
+                  //      self.newSetList.append(name!)
                         song.isInNewSetList = true
                     }
                 }
@@ -323,9 +333,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let label = cell.viewWithTag(1000) as! UILabel
         
-        let newEntry = self.newSetList[indexPath.row]
+        let setItem = self.newSetList[indexPath.row]
         
-        label.text = newEntry
+        label.text = setItem.title
 
         return cell
     }

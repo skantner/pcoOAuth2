@@ -44,7 +44,7 @@ class Attachment: NSObject {
     }
 }
 
-class newSetItem: NSObject {
+class NewSetItem: NSObject {
     
     var title : String
     var collectionIndex : IndexPath

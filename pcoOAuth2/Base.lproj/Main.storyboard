@@ -194,6 +194,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydo-fr-L5e">
+                                        <rect key="frame" x="760" y="6" width="66" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Rebuild"/>
+                                        <connections>
+                                            <action selector="rebuildPressed:" destination="rFg-cG-UF7" eventType="touchUpInside" id="hoZ-OA-GQC"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
@@ -386,6 +394,7 @@
                         <outlet property="newSetTableView" destination="jhN-0a-aG3" id="30I-SM-u62"/>
                         <outlet property="npSongTableView" destination="IzR-Az-xye" id="xrf-zS-HpV"/>
                         <outlet property="pcoTableView" destination="eqo-td-GXq" id="yfk-gL-urO"/>
+                        <outlet property="rebuildButton" destination="ydo-fr-L5e" id="S01-1W-lbu"/>
                         <outlet property="spinner" destination="YTy-JL-tj2" id="4sz-v9-yhR"/>
                     </connections>
                 </viewController>

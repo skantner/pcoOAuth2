@@ -34,7 +34,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var leadSwitch: UISwitch!
     @IBOutlet weak var chordSwitch: UISwitch!
     @IBOutlet weak var createSetListButton: UIButton!
-    
+    @IBOutlet weak var rebuildButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = UIColor.white
@@ -80,6 +81,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    @IBAction func rebuildPressed(_ sender: Any) {
+        
+        buildNewSetList()
+    }
+    
+    
     func buildNewSetList() {
         newSetList.removeAll()
         for song in self.songItems {
@@ -117,21 +124,20 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             let title = String(a.filename.dropLast(4))
                             let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
                             self.newSetList.append(newEntry)
-                            // mark attachment in collection view
-                            // colorize cell in newsettable
+                            markAttachmentCell(for: a)
                             song.isInNewSetList = true
                             break
                         }
                     }
                 } else { // otherwise, just pick the first available
                     if song.attachments.count > 0 {
-                        let name = song.attachments.first?.filename
+                        let attachment = song.attachments.first
+                        let name = attachment?.filename
                         // mark attachment in collection view
-                        // colorize cell in newsettable
                         let title = String(name!.dropLast(4))
                         let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
                         self.newSetList.append(newEntry)
-                  //      self.newSetList.append(name!)
+                        markAttachmentCell(for: attachment!)
                         song.isInNewSetList = true
                     }
                 }
@@ -154,6 +160,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
 
         self.createSetListButton.isEnabled = enable
+    }
+    
+    func markAttachmentCell(for attachment : Attachment) {
+        
+        self.collectionView.selectItem(at: attachment.indexPath, animated: false, scrollPosition: .centeredHorizontally)
     }
     
     func getPlanSongs() {
@@ -192,6 +203,17 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                 }
         })
+    }
+    
+    func indexAttachments() {
+        
+        for song in songItems {
+            for attachment in song.attachments {
+                let section = songItems.index(of: song)
+                let row = song.attachments.index(of: attachment)
+                attachment.indexPath = IndexPath(row: row!, section: section!)
+            }
+        }
     }
     
     func getSongAttachments() {
@@ -278,8 +300,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         DispatchQueue.main.async {
                             let v = self.view.viewWithTag(1000 + song.sequence) as? UIActivityIndicatorView
                             v?.stopAnimating()
+                            self.indexAttachments()
                             self.pcoTableView.reloadData()
                             self.collectionView.reloadData()
+
                             self.buildNewSetList()
                         }
                     }
@@ -437,7 +461,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.backgroundColor = UIColor.lightGray
         let song = self.songItems[indexPath.section]
         let attachment = song.attachments[indexPath.row]
-        attachment.indexPath = indexPath
         let label = cell.viewWithTag(2000) as! UILabel
         let filename = attachment.filename
         label.text = filename

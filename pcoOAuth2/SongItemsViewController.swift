@@ -98,11 +98,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             for np in self.npSongList {  // look for matches in the NextPage Song List
                 if np == song.title {
-                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0))
+                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0), isPCODownload: false)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 } else if np == testTitle {
-                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0))
+                    let newEntry = NewSetItem(title: testTitle, indexPath: IndexPath(row:0, section:0), isPCODownload: false)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 }
@@ -111,11 +111,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             if song.isInNewSetList {
                 continue
             } else { // pick something from the attachments we have in PCO
-                if scoreType != "" {
+                if scoreType != "" { // look for a match based on score type
                     for a in song.attachments {
                         if a.filename.range(of: scoreType) != nil {
                             let title = String(a.filename.dropLast(4))
-                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0))
+                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
                             self.newSetList.append(newEntry)
                             // mark attachment in collection view
                             // colorize cell in newsettable
@@ -123,13 +123,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                             break
                         }
                     }
-                } else {
+                } else { // otherwise, just pick the first available
                     if song.attachments.count > 0 {
                         let name = song.attachments.first?.filename
                         // mark attachment in collection view
                         // colorize cell in newsettable
                         let title = String(name!.dropLast(4))
-                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0))
+                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
                         self.newSetList.append(newEntry)
                   //      self.newSetList.append(name!)
                         song.isInNewSetList = true
@@ -220,8 +220,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let filename = attributes["filename"] as? String {
                                     if contentType == "application/pdf" {
                                         let aurl = url + "/\(attachmentID)/open"
+                                        let indexPath = IndexPath(row: 0, section: 0)
+
 //                                        print("Song:\(song.title):Attachment ID: \(attachmentID):filename \(filename):url \(aurl)")
-                                        let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : aurl)
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : contentType, url : aurl, indexPath : indexPath)
                                         song.attachments.append(a)
                                     }
                                 }
@@ -263,7 +265,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     let filename = attributes["filename"] as? String {
                                     if pcoType == "AttachmentChart::Lyric" {
                                         let aurl = url + "/\(attachmentID)/open"
-                                        let a = Attachment(id : attachmentID, filename : filename, contentType : pcoType, url : aurl)
+                                        let indexPath = IndexPath(row: 0, section: 0)
+                                        let a = Attachment(id : attachmentID, filename : filename, contentType : pcoType, url : aurl, indexPath : indexPath)
                                         song.attachments.append(a)
                                     }
                                 }
@@ -337,6 +340,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         label.text = setItem.title
 
+        if setItem.isPCODownload {
+            cell.backgroundColor = UIColor.blue
+        }
+        
         return cell
     }
 
@@ -430,6 +437,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.backgroundColor = UIColor.lightGray
         let song = self.songItems[indexPath.section]
         let attachment = song.attachments[indexPath.row]
+        attachment.indexPath = indexPath
         let label = cell.viewWithTag(2000) as! UILabel
         let filename = attachment.filename
         label.text = filename

@@ -160,7 +160,7 @@
                                 <rect key="frame" x="0.0" y="64" width="834" height="44"/>
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oFN-8c-sGH" userLabel="chordSwitch">
-                                        <rect key="frame" x="474" y="7" width="49" height="31"/>
+                                        <rect key="frame" x="413" y="11" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="chordsSwitch:" destination="jry-Ew-Acc" eventType="valueChanged" id="qhd-rC-OgX"/>
@@ -168,7 +168,7 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZDz-3J-led" userLabel="leadSwitch">
-                                        <rect key="frame" x="330" y="7" width="49" height="31"/>
+                                        <rect key="frame" x="270" y="11" width="49" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="leadSwitchChanged:" destination="rFg-cG-UF7" eventType="valueChanged" id="dzX-NU-fQr"/>
@@ -179,16 +179,19 @@
                                         <rect key="frame" x="16" y="7" width="112" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Create Set List"/>
+                                        <connections>
+                                            <action selector="createPressed:" destination="rFg-cG-UF7" eventType="touchUpInside" id="Q3x-XL-dVu"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Lead" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hI0-QT-3qE">
-                                        <rect key="frame" x="274" y="12" width="38" height="21"/>
+                                        <rect key="frame" x="213" y="16" width="38" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Chords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yFJ-Tw-qT2">
-                                        <rect key="frame" x="405" y="12" width="61" height="21"/>
+                                        <rect key="frame" x="344" y="16" width="61" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>

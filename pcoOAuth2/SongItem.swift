@@ -51,11 +51,14 @@ class NewSetItem: NSObject {
     var title : String
     var collectionIndex : IndexPath
     var isPCODownload = false
+    var attachment : Attachment?
     
-    init(title: String, indexPath: IndexPath, isPCODownload : Bool) {
+    init(title: String, indexPath: IndexPath, isPCODownload : Bool, attachment : Attachment?) {
         self.title = title
         self.collectionIndex = indexPath
         self.isPCODownload = isPCODownload
+        self.attachment = attachment
+
         super.init()
     }
     

@@ -6,6 +6,12 @@
 //  Copyright © 2018 Kantner Research And Technology. All rights reserved.
 //
 
+//TODO:
+// 1. Rerrange/delete from new set table
+// 2. Add/remove from NP song list by tapping on cells
+// 3. Activity indicator during attachment downloads
+// 4. Add/remove from new set by tapping on collectionView attachments
+
 import UIKit
 import AeroGearHttp
 import AeroGearOAuth2
@@ -57,7 +63,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.createSetListButton.isEnabled = false
         
     }
-
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -81,11 +86,59 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    @IBAction func createPressed(_ sender: Any) {
+
+        // Save .setlist file
+        // download needed attachments
+        
+        let setlist = NSMutableArray()
+        for song in newSetList {
+            setlist.add(song.title)
+            if song.isPCODownload {
+                getPCOAttachment(openUrl: song.attachment!.url, fileName: song.title)
+            }
+        }
+        
+//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        print("Documents dir:\(documentsURL)")
+        
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let writePath = documents + "/testsetlist.plist"
+        setlist.write(toFile: writePath, atomically: false)
+
+    }
+    
     @IBAction func rebuildPressed(_ sender: Any) {
         
         buildNewSetList()
     }
     
+    func getPCOAttachment(openUrl : String, fileName: String) {
+        let http = Http()
+        http.authzModule = self.authzModule
+        http.request(method: .post,
+                     path: openUrl,
+                     completionHandler: {(response, error) in
+                        if (error != nil) {
+                            print("Error -> \(error!.localizedDescription)")
+                        } else {
+                            if let jsonResult = response as? Dictionary<String, Any>,
+                                let attachmentData = jsonResult["data"] as? Dictionary<String, Any>,
+                                let attributes = attachmentData["attributes"] as? Dictionary<String, Any>,
+                                let attachmentUrl = attributes["attachment_url"] as? String {
+                                let s3http = Http()
+                                s3http.download(url: attachmentUrl,
+                                                method: .get,
+                                                progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
+                                                    print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
+                                }, completionHandler: { (response, error) in
+                                    //                            print("Download complete: \(response!)")
+                                    print("Download of \(fileName) complete.")
+                                })
+                            }
+                        }
+        })
+    }
     
     func buildNewSetList() {
         newSetList.removeAll()
@@ -98,6 +151,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else if self.leadSwitch.isOn {
             scoreType = "(LEAD)"
         }
+        
         for song in self.songItems {
             var testTitle = ""
             if scoreType != "" {
@@ -105,11 +159,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             for np in self.npSongList {  // look for matches in the NextPage Song List
                 if np == song.title {
-                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0), isPCODownload: false)
+                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 } else if np == testTitle {
-                    let newEntry = NewSetItem(title: testTitle, indexPath: IndexPath(row:0, section:0), isPCODownload: false)
+                    let newEntry = NewSetItem(title: testTitle, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                 }
@@ -122,7 +176,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                     for a in song.attachments {
                         if a.filename.range(of: scoreType) != nil {
                             let title = String(a.filename.dropLast(4))
-                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
+                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true, attachment: a)
                             self.newSetList.append(newEntry)
                             markAttachmentCell(for: a)
                             song.isInNewSetList = true
@@ -135,7 +189,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         let name = attachment?.filename
                         // mark attachment in collection view
                         let title = String(name!.dropLast(4))
-                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true)
+                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true, attachment: attachment)
                         self.newSetList.append(newEntry)
                         markAttachmentCell(for: attachment!)
                         song.isInNewSetList = true

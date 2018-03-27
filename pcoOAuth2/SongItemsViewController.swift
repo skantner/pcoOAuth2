@@ -35,6 +35,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     var downloadTotal = 0
     var downloadCount = 0
 
+
     @IBOutlet weak var pcoTableView: UITableView!
     @IBOutlet weak var npSongTableView: UITableView!
     @IBOutlet weak var newSetTableView: UITableView!
@@ -44,7 +45,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var chordSwitch: UISwitch!
     @IBOutlet weak var createSetListButton: UIButton!
     @IBOutlet weak var rebuildButton: UIButton!
-
+    @IBOutlet weak var newSetNavBar: UINavigationBar!
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = UIColor.white
@@ -90,6 +92,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         dipSpinner.bottomAnchor.constraint(equalTo: dipView.bottomAnchor, constant: -10).isActive = true
 
         dipView.alpha = 0.0
+        
+        newSetTableView.isEditing = true
+        
+     //   self.newSetNav.navigationItem.rightBarButtonItem = self.editButtonItem
+
     
     }
     
@@ -471,8 +478,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         label.text = setItem.title
 
         if setItem.isPCODownload {
-            cell.backgroundColor = UIColor.blue
+            cell.backgroundColor = GlobalVariables.pcoBlue
+            label.textColor = .white
+        } else {
+            cell.backgroundColor = .white
+            label.textColor = .black
         }
+        
+        cell.showsReorderControl = true
         
         return cell
     }
@@ -489,6 +502,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
 
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        print ("hi")
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

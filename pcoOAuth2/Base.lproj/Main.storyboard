@@ -245,33 +245,6 @@
                                     <outlet property="delegate" destination="rFg-cG-UF7" id="8JQ-Zg-JdW"/>
                                 </connections>
                             </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="jhN-0a-aG3" userLabel="New Set TableView">
-                                <rect key="frame" x="258" y="108" width="318" height="367"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewSetCell" id="EuP-PN-Pkn">
-                                        <rect key="frame" x="0.0" y="55.5" width="318" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EuP-PN-Pkn" id="Rao-aw-H3k">
-                                            <rect key="frame" x="0.0" y="0.0" width="318" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rNF-8f-Z20">
-                                                    <rect key="frame" x="10" y="0.0" width="298" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="rFg-cG-UF7" id="kaY-ft-TBp"/>
-                                    <outlet property="delegate" destination="rFg-cG-UF7" id="OTt-KD-KB3"/>
-                                </connections>
-                            </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="IzR-Az-xye" userLabel="NP Song TableView">
                                 <rect key="frame" x="584" y="108" width="250" height="367"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -362,29 +335,56 @@
                                     <outlet property="delegate" destination="rFg-cG-UF7" id="w1v-xf-MuC"/>
                                 </connections>
                             </collectionView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="jhN-0a-aG3" userLabel="New Set TableView">
+                                <rect key="frame" x="250" y="108" width="334" height="367"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewSetCell" id="EuP-PN-Pkn">
+                                        <rect key="frame" x="0.0" y="55.5" width="334" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EuP-PN-Pkn" id="Rao-aw-H3k">
+                                            <rect key="frame" x="0.0" y="0.0" width="334" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rNF-8f-Z20">
+                                                    <rect key="frame" x="10" y="0.0" width="298" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="rFg-cG-UF7" id="kaY-ft-TBp"/>
+                                    <outlet property="delegate" destination="rFg-cG-UF7" id="OTt-KD-KB3"/>
+                                </connections>
+                            </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.33225333690643311" green="0.49428784847259521" blue="0.93733435869216919" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="eqo-td-GXq" firstAttribute="width" secondItem="2X4-sd-kyI" secondAttribute="width" multiplier="0.3" id="BP7-Cf-D44"/>
-                            <constraint firstItem="jhN-0a-aG3" firstAttribute="top" secondItem="o58-Zp-nbR" secondAttribute="bottom" id="Dyt-O6-aIb"/>
                             <constraint firstItem="KgL-6U-kA3" firstAttribute="top" secondItem="IzR-Az-xye" secondAttribute="bottom" id="GsV-yE-Ynf"/>
                             <constraint firstItem="YTy-JL-tj2" firstAttribute="centerY" secondItem="2X4-sd-kyI" secondAttribute="centerY" id="HFq-8V-Txq"/>
                             <constraint firstItem="30Z-UY-xSt" firstAttribute="trailing" secondItem="KgL-6U-kA3" secondAttribute="trailing" id="Mux-8W-Zoh"/>
                             <constraint firstItem="eqo-td-GXq" firstAttribute="top" secondItem="o58-Zp-nbR" secondAttribute="bottom" id="NkU-KA-aus"/>
-                            <constraint firstItem="KgL-6U-kA3" firstAttribute="top" secondItem="jhN-0a-aG3" secondAttribute="bottom" id="OEF-RC-8vx"/>
                             <constraint firstItem="eqo-td-GXq" firstAttribute="height" secondItem="2X4-sd-kyI" secondAttribute="height" multiplier="0.33" id="Qx0-M6-HfC"/>
                             <constraint firstItem="30Z-UY-xSt" firstAttribute="trailing" secondItem="IzR-Az-xye" secondAttribute="trailing" id="TE6-lo-lCd"/>
+                            <constraint firstItem="jhN-0a-aG3" firstAttribute="leading" secondItem="eqo-td-GXq" secondAttribute="trailing" id="UQq-3F-wFN"/>
                             <constraint firstItem="o58-Zp-nbR" firstAttribute="top" secondItem="30Z-UY-xSt" secondAttribute="top" id="X5a-ph-o72"/>
-                            <constraint firstItem="jhN-0a-aG3" firstAttribute="leading" secondItem="eqo-td-GXq" secondAttribute="trailing" constant="8" id="Xrv-8P-4AM"/>
                             <constraint firstItem="IzR-Az-xye" firstAttribute="top" secondItem="o58-Zp-nbR" secondAttribute="bottom" id="ZHX-bG-mgK"/>
+                            <constraint firstItem="IzR-Az-xye" firstAttribute="leading" secondItem="jhN-0a-aG3" secondAttribute="trailing" id="cTW-ib-Vrp"/>
                             <constraint firstItem="KgL-6U-kA3" firstAttribute="leading" secondItem="30Z-UY-xSt" secondAttribute="leading" id="fgt-Cf-yOf"/>
                             <constraint firstItem="KgL-6U-kA3" firstAttribute="top" secondItem="eqo-td-GXq" secondAttribute="bottom" id="jes-9L-CAO"/>
                             <constraint firstItem="IzR-Az-xye" firstAttribute="width" secondItem="2X4-sd-kyI" secondAttribute="width" multiplier="0.3" id="ldO-Nz-FVU"/>
                             <constraint firstItem="YTy-JL-tj2" firstAttribute="centerX" secondItem="2X4-sd-kyI" secondAttribute="centerX" id="lfm-OD-ftK"/>
+                            <constraint firstItem="KgL-6U-kA3" firstAttribute="top" secondItem="jhN-0a-aG3" secondAttribute="bottom" id="oBV-2y-dnL"/>
                             <constraint firstItem="o58-Zp-nbR" firstAttribute="leading" secondItem="30Z-UY-xSt" secondAttribute="leading" id="p2I-G2-Xoq"/>
+                            <constraint firstItem="jhN-0a-aG3" firstAttribute="top" secondItem="o58-Zp-nbR" secondAttribute="bottom" id="rAd-2I-lHX"/>
                             <constraint firstItem="eqo-td-GXq" firstAttribute="leading" secondItem="30Z-UY-xSt" secondAttribute="leading" id="sSA-gB-8Ni"/>
                             <constraint firstItem="30Z-UY-xSt" firstAttribute="bottom" secondItem="KgL-6U-kA3" secondAttribute="bottom" id="ueg-nY-m3s"/>
-                            <constraint firstItem="IzR-Az-xye" firstAttribute="leading" secondItem="jhN-0a-aG3" secondAttribute="trailing" constant="8" id="yjY-7k-giT"/>
                             <constraint firstItem="30Z-UY-xSt" firstAttribute="trailing" secondItem="o58-Zp-nbR" secondAttribute="trailing" id="zwP-aH-7uQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="30Z-UY-xSt"/>
@@ -394,7 +394,7 @@
                         <outlet property="collectionView" destination="KgL-6U-kA3" id="hGq-rE-0yF"/>
                         <outlet property="createSetListButton" destination="0aY-0p-lmu" id="9t3-Gq-n3x"/>
                         <outlet property="leadSwitch" destination="ZDz-3J-led" id="3Sj-SM-e2p"/>
-                        <outlet property="newSetTableView" destination="jhN-0a-aG3" id="30I-SM-u62"/>
+                        <outlet property="newSetTableView" destination="jhN-0a-aG3" id="zKr-8h-MCF"/>
                         <outlet property="npSongTableView" destination="IzR-Az-xye" id="xrf-zS-HpV"/>
                         <outlet property="pcoTableView" destination="eqo-td-GXq" id="yfk-gL-urO"/>
                         <outlet property="rebuildButton" destination="ydo-fr-L5e" id="S01-1W-lbu"/>

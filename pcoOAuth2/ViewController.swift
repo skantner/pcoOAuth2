@@ -19,6 +19,10 @@ import AeroGearOAuth2
 let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b"
 let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
 
+struct GlobalVariables {
+    static var pcoBlue = UIColor.init(red: 0.3333333333, green: 0.4941176471, blue: 0.937254902, alpha: 1)
+}
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -35,6 +39,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var userName : String
     var scheduledPlans : [ScheduledPlan]
     var selectedPlan : Int
+    var connectionAlert : UIAlertController!
     
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
@@ -59,7 +64,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //3
         http.authzModule = gdModule
         
-        self.spinner.isHidden = true
+        self.spinner.hidesWhenStopped = true
+
+     //   self.spinner.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -112,13 +119,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func getPCOuserId() {
         
         self.spinner.startAnimating()
-        self.spinner.isHidden = false
+//        self.spinner.isHidden = false
         
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/me",
                      completionHandler: {(response, error) in
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
+                            DispatchQueue.main.async {
+                                self.spinner.stopAnimating()
+                                self.showAlert()
+                            }
                         } else {
                             if let jsonResult = response as? Dictionary<String, Any>,
                                 let data = jsonResult["data"] as? Dictionary<String, Any>,
@@ -131,7 +142,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                 print("PCO User Info: \(self.userName), ID = \(self.userID)")
                                 DispatchQueue.main.async {
                                     self.spinner.stopAnimating()
-                                    self.spinner.isHidden = true
+                                //    self.spinner.isHidden = true
                                     self.userIDLabel.text = self.userID
                                     self.nameLabel.text = self.userName
                                     self.getPCOSchedules(userID: self.userID)
@@ -154,6 +165,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                      completionHandler: {(response, error) in
                         if (error != nil) {
                             print("Error -> \(error!.localizedDescription)")
+                            DispatchQueue.main.async {
+                                self.spinner.stopAnimating()
+                                self.showAlert()
+                            }
                         } else {
                             if let jsonResult = response as? Dictionary<String, Any>,
                                 let scheduleData = jsonResult["data"] as? [Any] {
@@ -179,7 +194,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                         
                                         DispatchQueue.main.async {
                                             self.spinner.stopAnimating()
-                                            self.spinner.isHidden = true
+                                        //    self.spinner.isHidden = true
                                             self.tableView.reloadData()
                                         }
 
@@ -245,15 +260,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
          }
     }
     
-    // MARK: - Housekeeping
+    // MARK: - Error Reporting
     
-    func showNetworkError() {
-        let alert = UIAlertController(title: "Whoops...",
-                                      message: "There was an error accessing the iTunes Store. Please try again.", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        present(alert, animated: true, completion: nil)
-        alert.addAction(action)
+    func showAlert() {
+        if self.connectionAlert == nil {
+            self.connectionAlert = UIAlertController(title: "Can't Connect to PCO",
+                                                    message: "For some reason, PCO can not be contacted. PCO could be down, or you may have a networking problem. Check your WiFi or cellular connection and try again.",
+                                                    preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+            self.connectionAlert.addAction(action)
+        }
+        
+        self.present(self.connectionAlert, animated: true, completion: nil)
     }
+    // MARK: - Housekeeping
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

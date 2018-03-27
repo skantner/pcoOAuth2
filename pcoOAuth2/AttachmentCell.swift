@@ -14,7 +14,7 @@ class AttachmentCell: UICollectionViewCell {
         didSet{
             if self.isSelected
             {
-                self.contentView.backgroundColor = UIColor.blue
+                self.contentView.backgroundColor = GlobalVariables.pcoBlue
             } else {
                 self.contentView.backgroundColor = UIColor.lightGray
             }

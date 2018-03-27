@@ -17,6 +17,7 @@
 		775FD422203B0723008DDC49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775FD421203B0723008DDC49 /* Assets.xcassets */; };
 		775FD425203B0723008DDC49 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775FD423203B0723008DDC49 /* LaunchScreen.storyboard */; };
 		77A32A872059F42C003A3BF8 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A32A862059F42C003A3BF8 /* AttachmentCell.swift */; };
+		77B5979A206952EE00DD8414 /* TestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B59799206952EE00DD8414 /* TestTableViewController.swift */; };
 		77CDA1D8204EC31B00CBA09D /* SongItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */; };
 		77D21698205A995F00C26F75 /* SongHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D21697205A995F00C26F75 /* SongHeaderView.swift */; };
 		77E1A0852052BDC30086CB4A /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */; };
@@ -37,6 +38,7 @@
 		775FD424203B0723008DDC49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		775FD426203B0723008DDC49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77A32A862059F42C003A3BF8 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
+		77B59799206952EE00DD8414 /* TestTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewController.swift; sourceTree = "<group>"; };
 		77CDA1D7204EC31B00CBA09D /* SongItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongItemsViewController.swift; sourceTree = "<group>"; };
 		77D21697205A995F00C26F75 /* SongHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongHeaderView.swift; sourceTree = "<group>"; };
 		77E1A0842052BDC30086CB4A /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				775FD426203B0723008DDC49 /* Info.plist */,
 				77EDEEC2204EF63800BAA527 /* Scrap */,
 				775FD421203B0723008DDC49 /* Assets.xcassets */,
+				77B59799206952EE00DD8414 /* TestTableViewController.swift */,
 			);
 			path = pcoOAuth2;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77B5979A206952EE00DD8414 /* TestTableViewController.swift in Sources */,
 				775FD41D203B0723008DDC49 /* ViewController.swift in Sources */,
 				77E1A0852052BDC30086CB4A /* AttachmentsViewController.swift in Sources */,
 				770DDB1D204258910083631D /* pcoServiceType.swift in Sources */,

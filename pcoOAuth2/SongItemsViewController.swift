@@ -31,6 +31,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     var npSongList = [String]()
     var newSetList = [NewSetItem]()
+    var dipView = UIView()
+    var downloadTotal = 0
+    var downloadCount = 0
 
     @IBOutlet weak var pcoTableView: UITableView!
     @IBOutlet weak var npSongTableView: UITableView!
@@ -62,6 +65,32 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.chordSwitch.isOn = false
         self.createSetListButton.isEnabled = false
         
+        dipView.backgroundColor = .darkGray
+        self.view.addSubview(dipView)
+        dipView.translatesAutoresizingMaskIntoConstraints = false
+        dipView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        dipView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        dipView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        dipView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        dipView.layer.cornerRadius = 5.0
+        
+        let dipLabel = UILabel()
+        dipLabel.text = "Downloading from PCO"
+        dipLabel.textColor = .white
+        dipView.addSubview(dipLabel)
+        dipLabel.translatesAutoresizingMaskIntoConstraints = false
+        dipLabel.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
+        dipLabel.topAnchor.constraint(equalTo: dipView.topAnchor, constant: 10).isActive = true
+
+        let dipSpinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        dipSpinner.startAnimating()
+        dipView.addSubview(dipSpinner)
+        dipSpinner.translatesAutoresizingMaskIntoConstraints = false
+        dipSpinner.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
+        dipSpinner.bottomAnchor.constraint(equalTo: dipView.bottomAnchor, constant: -10).isActive = true
+
+        dipView.alpha = 0.0
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,20 +120,37 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         // Save .setlist file
         // download needed attachments
         
+        var mustDownload = false
+        
+        self.downloadTotal = 0
+        
         let setlist = NSMutableArray()
         for song in newSetList {
             setlist.add(song.title)
             if song.isPCODownload {
-                getPCOAttachment(openUrl: song.attachment!.url, fileName: song.title)
+                mustDownload = true
+                self.downloadTotal += 1
+            }
+        }
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let writePath = documents + "/testsetlist.plist"
+        setlist.write(toFile: writePath, atomically: false)
+
+        if mustDownload {
+            DispatchQueue.main.async {
+                self.dipView.alpha = 1.0
+            }
+            downloadCount = 0
+            for song in newSetList {
+                if song.isPCODownload {
+                    getPCOAttachment(openUrl: song.attachment!.url, fileName: song.title)
+                }
             }
         }
         
 //        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //        print("Documents dir:\(documentsURL)")
         
-        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        let writePath = documents + "/testsetlist.plist"
-        setlist.write(toFile: writePath, atomically: false)
 
     }
     
@@ -134,6 +180,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                 }, completionHandler: { (response, error) in
                                     //                            print("Download complete: \(response!)")
                                     print("Download of \(fileName) complete.")
+                                    self.downloadCount += 1
+                                    if self.downloadCount == self.downloadTotal {
+                                        DispatchQueue.main.async {
+                                            self.dipView.alpha = 0.0
+                                        }
+                                    }
                                 })
                             }
                         }
@@ -484,6 +536,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (tableView == self.newSetTableView) && (editingStyle == .delete)  {
+            self.newSetList.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
     // MARK: - CollectionView
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

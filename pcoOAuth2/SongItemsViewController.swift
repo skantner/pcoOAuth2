@@ -29,11 +29,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     var didGetSongs = false
     let itemsPerRow: CGFloat = 5
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
-    var npSongList = [String]()
+    var npSongList = [NPSongItem]()
     var newSetList = [NewSetItem]()
     var dipView = UIView()
     var downloadTotal = 0
     var downloadCount = 0
+    var disconnected = false
 
 
     @IBOutlet weak var pcoTableView: UITableView!
@@ -56,9 +57,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.collectionView.allowsMultipleSelection = true
         
-        npSongList.append("Fullness")
-        npSongList.append("Here In The Presence-B (LEAD)")
-        npSongList.append("Here In The Presence-B (CHORDS)")
+        buildFakeNPSongList()
         
         npSongTableView.estimatedRowHeight = 44.0
         npSongTableView.rowHeight = UITableViewAutomaticDimension
@@ -104,7 +103,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidAppear(animated)
         
         if !didGetSongs {
-            getPlanSongs()
+            if !disconnected {
+                getPlanSongs()
+            } else {
+                buildFakePCOSetList()
+            }
         }
     }
 
@@ -166,38 +169,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         buildNewSetList()
     }
     
-    func getPCOAttachment(openUrl : String, fileName: String) {
-        let http = Http()
-        http.authzModule = self.authzModule
-        http.request(method: .post,
-                     path: openUrl,
-                     completionHandler: {(response, error) in
-                        if (error != nil) {
-                            print("Error -> \(error!.localizedDescription)")
-                        } else {
-                            if let jsonResult = response as? Dictionary<String, Any>,
-                                let attachmentData = jsonResult["data"] as? Dictionary<String, Any>,
-                                let attributes = attachmentData["attributes"] as? Dictionary<String, Any>,
-                                let attachmentUrl = attributes["attachment_url"] as? String {
-                                let s3http = Http()
-                                s3http.download(url: attachmentUrl,
-                                                method: .get,
-                                                progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
-                                                    print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
-                                }, completionHandler: { (response, error) in
-                                    //                            print("Download complete: \(response!)")
-                                    print("Download of \(fileName) complete.")
-                                    self.downloadCount += 1
-                                    if self.downloadCount == self.downloadTotal {
-                                        DispatchQueue.main.async {
-                                            self.dipView.alpha = 0.0
-                                        }
-                                    }
-                                })
-                            }
-                        }
-        })
-    }
     
     func buildNewSetList() {
         newSetList.removeAll()
@@ -217,14 +188,16 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                 testTitle = song.title + "-\(song.keyName) \(scoreType)"
             }
             for np in self.npSongList {  // look for matches in the NextPage Song List
-                if np == song.title {
+                if np.title == song.title {
                     let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
-                } else if np == testTitle {
+                    np.isInNewSetList = true
+                } else if np.title == testTitle {
                     let newEntry = NewSetItem(title: testTitle, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
+                    np.isInNewSetList = true
                 }
                 if song.isInNewSetList { break }
             }
@@ -262,7 +235,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         // 3. refresh table
         
         self.newSetTableView.reloadData()
+        self.npSongTableView.reloadData()
         
+        validateNewSet()
+        
+    }
+    
+    func validateNewSet() {
         var enable = true
         
         for song in self.songItems {
@@ -271,7 +250,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                 break
             }
         }
-
+        
         self.createSetListButton.isEnabled = enable
     }
     
@@ -316,6 +295,65 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                 }
         })
+    }
+    
+    func getPCOAttachment(openUrl : String, fileName: String) {
+        let http = Http()
+        http.authzModule = self.authzModule
+        http.request(method: .post,
+                     path: openUrl,
+                     completionHandler: {(response, error) in
+                        if (error != nil) {
+                            print("Error -> \(error!.localizedDescription)")
+                        } else {
+                            if let jsonResult = response as? Dictionary<String, Any>,
+                                let attachmentData = jsonResult["data"] as? Dictionary<String, Any>,
+                                let attributes = attachmentData["attributes"] as? Dictionary<String, Any>,
+                                let attachmentUrl = attributes["attachment_url"] as? String {
+                                let s3http = Http()
+                                s3http.download(url: attachmentUrl,
+                                                method: .get,
+                                                progress: { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite)  in
+                                                    print("bytesWritten: \(bytesWritten), totalBytesWritten: \(totalBytesWritten), totalBytesExpectedToWrite: \(totalBytesExpectedToWrite)")
+                                }, completionHandler: { (response, error) in
+                                    //                            print("Download complete: \(response!)")
+                                    print("Download of \(fileName) complete.")
+                                    self.downloadCount += 1
+                                    if self.downloadCount == self.downloadTotal {
+                                        DispatchQueue.main.async {
+                                            self.dipView.alpha = 0.0
+                                        }
+                                    }
+                                })
+                            }
+                        }
+        })
+    }
+    
+    func buildFakePCOSetList() {
+        var songItem = SongItem(itemID : "0", title : "Here In The Presence", keyName : "B", sequence : 0)
+        self.songItems.append(songItem)
+        songItem = SongItem(itemID : "1", title : "The Lion And The Lamb", keyName : "B", sequence : 1)
+        self.songItems.append(songItem)
+        songItem = SongItem(itemID : "2", title : "Not For a Moment", keyName : "Ab", sequence : 2)
+        self.songItems.append(songItem)
+        songItem = SongItem(itemID : "3", title : "Even So Come", keyName : "C", sequence : 3)
+        self.songItems.append(songItem)
+        songItem = SongItem(itemID : "4", title : "Fullness", keyName : "C", sequence : 4)
+        self.songItems.append(songItem)
+        self.pcoTableView.reloadData()
+        self.buildNewSetList()
+    }
+    
+    func buildFakeNPSongList() {
+        var npSong = NPSongItem(title: "Even So Come", isInNewSetList: false)
+        npSongList.append(npSong)
+        npSong = NPSongItem(title: "Fullness", isInNewSetList: false)
+        npSongList.append(npSong)
+        npSong = NPSongItem(title: "Here In The Presence-B (LEAD)", isInNewSetList: false)
+        npSongList.append(npSong)
+        npSong = NPSongItem(title: "Here In The Presence-B (CHORDS)", isInNewSetList: false)
+        npSongList.append(npSong)
     }
     
     func indexAttachments() {
@@ -459,9 +497,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if cell.accessoryView == nil {
             let ai = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-            ai.startAnimating()
+            if !self.disconnected {
+                ai.startAnimating()
+
+            }
             cell.accessoryView = ai
         }
+        
         
         cell.accessoryView?.tag = 1000 + song.sequence
         
@@ -497,13 +539,26 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let npSong = self.npSongList[indexPath.row]
         
-        label.text = npSong
+        label.text = npSong.title
+        
+        if npSong.isInNewSetList {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        newSetTableView.moveRow(at: sourceIndexPath, to: destination)
+        let moveItem = self.newSetList[sourceIndexPath.row]
+        self.newSetList.remove(at: sourceIndexPath.row)
+        self.newSetList.insert(moveItem, at: destinationIndexPath.row)
+        
+        newSetTableView.reloadData()
         print ("hi")
+
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -549,6 +604,18 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.pcoTableView.deselectRow(at: indexPath, animated: true)
             self.selectedSongIndex = indexPath.row
       //      performSegue(withIdentifier: "ShowAttachments", sender: nil)
+        } else if tableView == self.npSongTableView {
+            if let cell = self.npSongTableView.cellForRow(at: indexPath) {
+                self.npSongTableView.deselectRow(at: indexPath, animated: true)
+                if cell.accessoryType == .checkmark {
+                    cell.accessoryType = .none
+                    // delete from newSetTable
+                } else {
+                    cell.accessoryType = .checkmark
+                    // add to newSetTable
+                }
+                // check to see if set is valid (complete)
+            }
         }
     }
 
@@ -556,8 +623,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         if (tableView == self.newSetTableView) && (editingStyle == .delete)  {
             self.newSetList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            validateNewSet()
         }
     }
+    
     // MARK: - CollectionView
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

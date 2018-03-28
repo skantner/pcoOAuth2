@@ -61,5 +61,17 @@ class NewSetItem: NSObject {
 
         super.init()
     }
-    
 }
+
+class NPSongItem: NSObject {
+    
+    var title : String
+    var isInNewSetList : Bool
+    
+    init(title: String, isInNewSetList : Bool) {
+        self.title = title
+        self.isInNewSetList = isInNewSetList
+        super.init()
+    }
+}
+

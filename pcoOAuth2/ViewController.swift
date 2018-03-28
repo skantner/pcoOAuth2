@@ -40,6 +40,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var scheduledPlans : [ScheduledPlan]
     var selectedPlan : Int
     var connectionAlert : UIAlertController!
+    var disconnected = false
     
     let PCOUserID = Notification.Name(rawValue: "PCOUserIDNotification")
     
@@ -47,6 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var userIDLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var disconnectedSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,12 +63,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             clientSecret: clientSecret)
         
         let gdModule = AccountManager.addAccountWith(config: pcoConfig, moduleClass: OAuth2Module.self)
-        //3
         http.authzModule = gdModule
         
         self.spinner.hidesWhenStopped = true
-
-     //   self.spinner.isHidden = true
+        
+        self.disconnectedSwitch.setOn(false, animated: false)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -80,15 +81,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.init(coder: aDecoder)
     }
     
+    @IBAction func discconnctSwitchChanged(_ sender: Any) {
+        disconnected = !disconnected
+    }
     
     @IBAction func goPressed() {
         
-        getPCOuserId()
+        if disconnected {
+            performSegue(withIdentifier: "ShowPlan", sender: nil)
+        } else {
+            getPCOuserId()
+        }
         
-//        DispatchQueue.main.async(execute: {
-//            self.updateUISuccess(resp)
-//        })
-
 /*
         http.request(method: .get,
                      path: "https://api.planningcenteronline.com/services/v2/service_types",
@@ -252,11 +256,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if segue.identifier == "ShowPlan" {
             let planVC = segue.destination as! SongItemsViewController
-            planVC.planID = self.scheduledPlans[selectedPlan].planID
-            planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
-            planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName
-            planVC.schedDate = self.scheduledPlans[selectedPlan].scheduledDate
-            planVC.authzModule = self.http.authzModule
+            planVC.disconnected = self.disconnected
+            if !self.disconnected {
+                planVC.planID = self.scheduledPlans[selectedPlan].planID
+                planVC.serviceTypeID = self.scheduledPlans[selectedPlan].serviceTypeID
+                planVC.serviceTypeName = self.scheduledPlans[selectedPlan].serviceTypeName
+                planVC.schedDate = self.scheduledPlans[selectedPlan].scheduledDate
+                planVC.authzModule = self.http.authzModule
+            }
          }
     }
     
@@ -273,6 +280,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.present(self.connectionAlert, animated: true, completion: nil)
     }
+    
     // MARK: - Housekeeping
     
     override func didReceiveMemoryWarning() {

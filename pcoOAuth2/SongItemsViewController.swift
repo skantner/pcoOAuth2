@@ -189,12 +189,12 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             for np in self.npSongList {  // look for matches in the NextPage Song List
                 if np.title == song.title {
-                    let newEntry = NewSetItem(title: song.title, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
+                    let newEntry = NewSetItem(title: song.title, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                     np.isInNewSetList = true
                 } else if np.title == testTitle {
-                    let newEntry = NewSetItem(title: testTitle, indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
+                    let newEntry = NewSetItem(title: testTitle, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                     np.isInNewSetList = true
@@ -208,7 +208,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                     for a in song.attachments {
                         if a.filename.range(of: scoreType) != nil {
                             let title = String(a.filename.dropLast(4))
-                            let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true, attachment: a)
+                            let id = song.itemID
+                            let newEntry = NewSetItem(title: title, id: id, indexPath: a.collectionIndexPath, isPCODownload: true, attachment: a)
                             self.newSetList.append(newEntry)
                             markAttachmentCell(for: a)
                             song.isInNewSetList = true
@@ -221,7 +222,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         let name = attachment?.filename
                         // mark attachment in collection view
                         let title = String(name!.dropLast(4))
-                        let newEntry = NewSetItem(title: title, indexPath: IndexPath(row:0, section:0), isPCODownload: true, attachment: attachment)
+                        let id = song.itemID
+                        let newEntry = NewSetItem(title: title, id: id, indexPath: (attachment?.collectionIndexPath)!, isPCODownload: true, attachment: attachment)
                         self.newSetList.append(newEntry)
                         markAttachmentCell(for: attachment!)
                         song.isInNewSetList = true
@@ -256,7 +258,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func markAttachmentCell(for attachment : Attachment) {
         
-        self.collectionView.selectItem(at: attachment.indexPath, animated: false, scrollPosition: .centeredHorizontally)
+        self.collectionView.selectItem(at: attachment.collectionIndexPath, animated: false, scrollPosition: .centeredHorizontally)
     }
     
     func getPlanSongs() {
@@ -362,7 +364,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             for attachment in song.attachments {
                 let section = songItems.index(of: song)
                 let row = song.attachments.index(of: attachment)
-                attachment.indexPath = IndexPath(row: row!, section: section!)
+                attachment.collectionIndexPath = IndexPath(row: row!, section: section!)
             }
         }
     }
@@ -551,7 +553,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        newSetTableView.moveRow(at: sourceIndexPath, to: destination)
         let moveItem = self.newSetList[sourceIndexPath.row]
         self.newSetList.remove(at: sourceIndexPath.row)
         self.newSetList.insert(moveItem, at: destinationIndexPath.row)
@@ -674,11 +675,28 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
-
     func collectionView(_ collectionView: UICollectionView,
                                  didSelectItemAt indexPath: IndexPath) {
         print ("Hi from \(indexPath.section):\(indexPath.row)")
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        for (x, newItem) in newSetList.enumerated() {
+            if newItem.collectionIndexPath == indexPath {
+                newSetList.remove(at: x)
+                for songItem in songItems {
+                    if songItem.itemID == newItem.itemID {
+                        songItem.isInNewSetList = false
+                        break
+                    }
+                }
+                newSetTableView.reloadData()
+                validateNewSet()
+                break
+            }
+        }
+    }
+    
     //MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

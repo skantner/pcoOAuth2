@@ -33,14 +33,14 @@ class Attachment: NSObject {
     var filename = ""
     var contentType = ""
     var url = ""
-    var indexPath : IndexPath
+    var collectionIndexPath : IndexPath
     
     init(id : String, filename : String, contentType : String, url : String, indexPath: IndexPath) {
         self.id = id
         self.filename = filename
         self.contentType = contentType
         self.url = url
-        self.indexPath = indexPath
+        self.collectionIndexPath = indexPath
         
         super.init()
     }
@@ -48,14 +48,17 @@ class Attachment: NSObject {
 
 class NewSetItem: NSObject {
     
+    var itemID : String
     var title : String
-    var collectionIndex : IndexPath
+    var collectionIndexPath : IndexPath
     var isPCODownload = false
     var attachment : Attachment?
+
     
-    init(title: String, indexPath: IndexPath, isPCODownload : Bool, attachment : Attachment?) {
+    init(title: String, id: String, indexPath: IndexPath, isPCODownload : Bool, attachment : Attachment?) {
         self.title = title
-        self.collectionIndex = indexPath
+        self.itemID = id
+        self.collectionIndexPath = indexPath
         self.isPCODownload = isPCODownload
         self.attachment = attachment
 

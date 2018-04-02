@@ -7,10 +7,10 @@
 //
 
 //TODO:
-// 1. Rerrange/delete from new set table
-// 2. Add/remove from NP song list by tapping on cells
-// 3. Activity indicator during attachment downloads
-// 4. Add/remove from new set by tapping on collectionView attachments
+// 1. Add/remove from NP song list by tapping on cells
+// 2. Activity indicator during attachment downloads
+// 3. Add/remove from new set by tapping on collectionView attachments
+// 4. Cloud download symbol indicating attachemnt will be downloaded instead of using blue background color
 
 import UIKit
 import AeroGearHttp
@@ -145,7 +145,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let writePath = documents + "/testsetlist.plist"
         setlist.write(toFile: writePath, atomically: false)
-
+        print("\(writePath)")
+        
         if mustDownload {
             DispatchQueue.main.async {
                 self.dipView.alpha = 1.0
@@ -254,6 +255,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         self.createSetListButton.isEnabled = enable
+        self.pcoTableView.reloadData()
     }
     
     func markAttachmentCell(for attachment : Attachment) {
@@ -466,6 +468,24 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK: - Table view data source
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        switch tableView {
+        case self.pcoTableView:
+            return self.songItems.count
+        case self.newSetTableView:
+            return self.newSetList.count
+        case self.npSongTableView:
+            return self.npSongList.count
+        default:
+            return 0
+        }
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         switch tableView {
@@ -506,6 +526,17 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.accessoryView = ai
         }
         
+        if song.isInNewSetList {
+            cell.contentView.backgroundColor = .white
+            label.textColor = .black
+            detailLabel.textColor = .black
+        } else {
+            cell.contentView.backgroundColor = UIColor.init(red: 0.5803921569, green: 0.0666666667, blue: 0, alpha: 0.5)
+            label.textColor = .white
+            label.backgroundColor = .clear
+            detailLabel.textColor = .white
+            detailLabel.backgroundColor = .clear
+        }
         
         cell.accessoryView?.tag = 1000 + song.sequence
         
@@ -558,28 +589,8 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.newSetList.insert(moveItem, at: destinationIndexPath.row)
         
         newSetTableView.reloadData()
-        print ("hi")
-
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        switch tableView {
-        case self.pcoTableView:
-            return self.songItems.count
-        case self.newSetTableView:
-            return self.newSetList.count
-        case self.npSongTableView:
-            return self.npSongList.count
-        default:
-            return 0
-        }
-    }
-
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title = ""
 
@@ -622,8 +633,19 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (tableView == self.newSetTableView) && (editingStyle == .delete)  {
+            let newItem = self.newSetList[indexPath.row]
             self.newSetList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            for songItem in songItems {
+                if songItem.itemID == newItem.itemID {
+                    songItem.isInNewSetList = false
+                    for a in songItem.attachments {
+                        self.collectionView.deselectItem(at: a.collectionIndexPath, animated: false)
+                    }
+                    break
+                }
+            }
+
             validateNewSet()
         }
     }
@@ -678,6 +700,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     func collectionView(_ collectionView: UICollectionView,
                                  didSelectItemAt indexPath: IndexPath) {
         print ("Hi from \(indexPath.section):\(indexPath.row)")
+        let song = self.songItems[indexPath.section]
+        let title = String(song.attachments[indexPath.row].filename.dropLast(4))
+        let newEntry = NewSetItem(title: title, id: song.itemID, indexPath: indexPath, isPCODownload: true, attachment: song.attachments[indexPath.row])
+        self.newSetList.insert(newEntry, at: 0)
+        song.isInNewSetList = true
+        self.newSetTableView.reloadData()
+        validateNewSet()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

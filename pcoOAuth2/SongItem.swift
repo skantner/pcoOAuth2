@@ -10,7 +10,7 @@ import Foundation
 
 class SongItem: NSObject {
     
-    var itemID = ""
+    var itemID = ""  // PCO item id
     var title = ""
     var keyName = ""
     var sequence = 0

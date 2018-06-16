@@ -127,9 +127,6 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBAction func createPressed(_ sender: Any) {
 
-        // Save .setlist file
-        // download needed attachments
-        
         if !setlistComplete() {
             let alert = UIAlertController(title: "Set List Not Complete",
                                                      message: "The new set list does not include all of the songs in the PCO set list. Do you still want to create it?",
@@ -151,6 +148,10 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func createSetList() {
+
+        // Save .setlist file
+        // download needed attachments
+        
         var mustDownload = false
         
         self.downloadTotal = 0
@@ -182,15 +183,11 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
 //        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //        print("Documents dir:\(documentsURL)")
-        
-
     }
     
     @IBAction func rebuildPressed(_ sender: Any) {
-        
         buildNewSetList()
     }
-    
     
     func buildNewSetList() {
         newSetList.removeAll()
@@ -266,15 +263,16 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func validateNewSet() {
-        var enable = true
         
-        for song in self.songItems {
-            if !song.isInNewSetList {
-                enable = false
-                break
-            }
-        }
-        
+//        var enable = true
+//        
+//        for song in self.songItems {
+//            if !song.isInNewSetList {
+//                enable = false
+//                break
+//            }
+//        }
+//        
 //        self.createSetListButton.isEnabled = enable
         self.pcoTableView.reloadData()
     }

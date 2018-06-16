@@ -7,10 +7,8 @@
 //
 
 //TODO:
-// 1. Add/remove from NP song list by tapping on cells
-// 2. Activity indicator during attachment downloads
-// 3. Add/remove from new set by tapping on collectionView attachments
-// 4. Cloud download symbol indicating attachemnt will be downloaded instead of using blue background color
+// 1. Activity indicator during attachment downloads
+// 2. Cloud download symbol indicating attachemnt will be downloaded instead of using blue background color
 
 import UIKit
 import AeroGearHttp
@@ -265,14 +263,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     func validateNewSet() {
         
 //        var enable = true
-//        
+//
 //        for song in self.songItems {
 //            if !song.isInNewSetList {
 //                enable = false
 //                break
 //            }
 //        }
-//        
+//
 //        self.createSetListButton.isEnabled = enable
         self.pcoTableView.reloadData()
     }
@@ -669,15 +667,24 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         } else if tableView == self.npSongTableView {
             if let cell = self.npSongTableView.cellForRow(at: indexPath) {
                 self.npSongTableView.deselectRow(at: indexPath, animated: true)
-                if cell.accessoryType == .checkmark {
+                if cell.accessoryType == .checkmark { // delete from newSetTable
                     cell.accessoryType = .none
-                    // delete from newSetTable
-                } else {
+                    let song = self.npSongList[indexPath.row]
+                    for item in self.newSetList {
+                        if item.title == song.title {
+                            if let x = self.newSetList.index(of: item) {
+                                self.newSetList.remove(at: x)
+                            }
+                        }
+                    }
+                } else { // add to newSetTable
                     cell.accessoryType = .checkmark
-                    // add to newSetTable
+                    let song = self.npSongList[indexPath.row]
+                    let newEntry = NewSetItem(title: song.title, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, isNPLocalSong: true, attachment: nil)
+                    self.newSetList.append(newEntry)
                 }
-                // check to see if set is valid (complete)
             }
+            self.newSetTableView.reloadData()
         }
     }
 
@@ -695,7 +702,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                     break
                 }
             }
-
+            self.npSongTableView.reloadData()
             validateNewSet()
         }
     }

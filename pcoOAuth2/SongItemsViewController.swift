@@ -64,7 +64,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.leadSwitch.isOn = true
         self.chordSwitch.isOn = false
-        self.createSetListButton.isEnabled = false
+//        self.createSetListButton.isEnabled = false
         
         dipView.backgroundColor = .darkGray
         self.view.addSubview(dipView)
@@ -130,6 +130,27 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         // Save .setlist file
         // download needed attachments
         
+        if !setlistComplete() {
+            let alert = UIAlertController(title: "Set List Not Complete",
+                                                     message: "The new set list does not include all of the songs in the PCO set list. Do you still want to create it?",
+                                                     preferredStyle: .alert)
+            let yes = UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+                self.createSetList()
+            })
+            let no = UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
+                return
+            })
+            
+            alert.addAction(yes)
+            alert.addAction(no)
+
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            createSetList()
+        }
+    }
+    
+    func createSetList() {
         var mustDownload = false
         
         self.downloadTotal = 0
@@ -188,14 +209,14 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             if scoreType != "" {
                 testTitle = song.title + "-\(song.keyName) \(scoreType)"
             }
-            for np in self.npSongList {  // look for matches in the NextPage Song List
+            for np in self.npSongList {  // look for matches in the NextPage Song List first...
                 if np.title == song.title {
-                    let newEntry = NewSetItem(title: song.title, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
+                    let newEntry = NewSetItem(title: song.title, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, isNPLocalSong: true, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                     np.isInNewSetList = true
                 } else if np.title == testTitle {
-                    let newEntry = NewSetItem(title: testTitle, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, attachment: nil)
+                    let newEntry = NewSetItem(title: testTitle, id:"", indexPath: IndexPath(row:0, section:0), isPCODownload: false, isNPLocalSong: true, attachment: nil)
                     self.newSetList.append(newEntry)
                     song.isInNewSetList = true
                     np.isInNewSetList = true
@@ -204,13 +225,13 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             if song.isInNewSetList {
                 continue
-            } else { // pick something from the attachments we have in PCO
-                if scoreType != "" { // look for a match based on score type
+            } else { // if not in NP, try to pick something from the attachments we have in PCO
+                if scoreType != "" { // First look for a match based on score type...
                     for a in song.attachments {
                         if a.filename.range(of: scoreType) != nil {
                             let title = String(a.filename.dropLast(4))
                             let id = song.itemID
-                            let newEntry = NewSetItem(title: title, id: id, indexPath: a.collectionIndexPath, isPCODownload: true, attachment: a)
+                            let newEntry = NewSetItem(title: title, id: id, indexPath: a.collectionIndexPath, isPCODownload: true, isNPLocalSong: false, attachment: a)
                             self.newSetList.append(newEntry)
                             markAttachmentCell(for: a)
                             song.isInNewSetList = true
@@ -224,7 +245,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                         // mark attachment in collection view
                         let title = String(name!.dropLast(4))
                         let id = song.itemID
-                        let newEntry = NewSetItem(title: title, id: id, indexPath: (attachment?.collectionIndexPath)!, isPCODownload: true, attachment: attachment)
+                        let newEntry = NewSetItem(title: title, id: id, indexPath: (attachment?.collectionIndexPath)!, isPCODownload: true, isNPLocalSong: false, attachment: attachment)
                         self.newSetList.append(newEntry)
                         markAttachmentCell(for: attachment!)
                         song.isInNewSetList = true
@@ -254,9 +275,23 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         
-        self.createSetListButton.isEnabled = enable
+//        self.createSetListButton.isEnabled = enable
         self.pcoTableView.reloadData()
     }
+
+    func setlistComplete() -> Bool {
+        var complete = true
+        
+        for song in self.songItems {
+            if !song.isInNewSetList {
+                complete = false
+                break
+            }
+        }
+
+        return complete
+    }
+
     
     func markAttachmentCell(for attachment : Attachment) {
         
@@ -352,7 +387,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     func buildFakeNPSongList() {
         var npSong = NPSongItem(title: "Even So Come", isInNewSetList: false)
         npSongList.append(npSong)
-        npSong = NPSongItem(title: "Fullness", isInNewSetList: false)
+        npSong = NPSongItem(title: "FullnessFriends", isInNewSetList: false)
         npSongList.append(npSong)
         npSong = NPSongItem(title: "Here In The Presence-B (LEAD)", isInNewSetList: false)
         npSongList.append(npSong)
@@ -555,6 +590,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         if setItem.isPCODownload {
             cell.backgroundColor = GlobalVariables.pcoBlue
             label.textColor = .white
+        } else if setItem.isNPLocalSong {
+            cell.backgroundColor = GlobalVariables.npGreen
+            label.textColor = .white
         } else {
             cell.backgroundColor = .white
             label.textColor = .black
@@ -590,6 +628,20 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         newSetTableView.reloadData()
     }
+
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        if tableView == self.pcoTableView {
+//            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
+//            if (section == 0) {
+//                headerView.backgroundColor = GlobalVariables.pcoBlue
+//            } else {
+//                headerView.backgroundColor = UIColor.clear
+//            }
+//            return headerView
+//
+//        }
+//        return nil
+//    }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title = ""
@@ -649,7 +701,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
             validateNewSet()
         }
     }
-    
+     
     // MARK: - CollectionView
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -702,7 +754,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         print ("Hi from \(indexPath.section):\(indexPath.row)")
         let song = self.songItems[indexPath.section]
         let title = String(song.attachments[indexPath.row].filename.dropLast(4))
-        let newEntry = NewSetItem(title: title, id: song.itemID, indexPath: indexPath, isPCODownload: true, attachment: song.attachments[indexPath.row])
+        let newEntry = NewSetItem(title: title, id: song.itemID, indexPath: indexPath, isPCODownload: true, isNPLocalSong: false, attachment: song.attachments[indexPath.row])
         self.newSetList.insert(newEntry, at: 0)
         song.isInNewSetList = true
         self.newSetTableView.reloadData()

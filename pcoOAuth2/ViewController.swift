@@ -20,7 +20,10 @@ let clientID = "3c4a2ee10fae6870972de58cfc661341348c0e5dc5b0727fa9fb669b388f565b
 let clientSecret = "896b9f9605027405d465a9a9c82b9d6613ec5eeffbb8c77b7be96b73e597f873"
 
 struct GlobalVariables {
+
     static var pcoBlue = UIColor.init(red: 0.3333333333, green: 0.4941176471, blue: 0.937254902, alpha: 1)
+    static var npGreen = UIColor.init(red: 0.4117647059, green: 0.4196078431, blue: 0.0588235294, alpha: 1)
+
 }
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {

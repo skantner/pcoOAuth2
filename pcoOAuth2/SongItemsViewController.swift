@@ -28,7 +28,7 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     var npSongList = [NPSongItem]()
     var newSetList = [NewSetItem]()
-    var dipView = UIView()
+//    var dipView = UIView()
     var downloadTotal = 0
     var downloadCount = 0
     var disconnected = false
@@ -44,6 +44,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var createSetListButton: UIButton!
     @IBOutlet weak var rebuildButton: UIButton!
     @IBOutlet weak var newSetNavBar: UINavigationBar!
+    @IBOutlet weak var dipView: UIView!
+    @IBOutlet weak var dipSpinner: UIActivityIndicatorView!
+    @IBOutlet weak var dispProgressLabel: UILabel!
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,32 +66,34 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         self.chordSwitch.isOn = false
 //        self.createSetListButton.isEnabled = false
         
-        dipView.backgroundColor = .darkGray
-        self.view.addSubview(dipView)
-        dipView.translatesAutoresizingMaskIntoConstraints = false
-        dipView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        dipView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        dipView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        dipView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        dipView.layer.cornerRadius = 5.0
         
-        let dipLabel = UILabel()
-        dipLabel.text = "Downloading from PCO"
-        dipLabel.textColor = .white
-        dipView.addSubview(dipLabel)
-        dipLabel.translatesAutoresizingMaskIntoConstraints = false
-        dipLabel.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
-        dipLabel.topAnchor.constraint(equalTo: dipView.topAnchor, constant: 10).isActive = true
+//        dipView.backgroundColor = .darkGray
+//        self.view.addSubview(dipView)
+//        dipView.translatesAutoresizingMaskIntoConstraints = false
+//        dipView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+//        dipView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+//        dipView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+//        dipView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+          self.dipView.layer.cornerRadius = 5.0
+//
+//        let dipLabel = UILabel()
+//        dipLabel.text = "Downloading from PCO"
+//        dipLabel.textColor = .white
+//        dipView.addSubview(dipLabel)
+//        dipLabel.translatesAutoresizingMaskIntoConstraints = false
+//        dipLabel.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
+//        dipLabel.topAnchor.constraint(equalTo: dipView.topAnchor, constant: 10).isActive = true
+//
+//        let dipSpinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+//        dipSpinner.startAnimating()
+//        dipView.addSubview(dipSpinner)
+//        dipSpinner.translatesAutoresizingMaskIntoConstraints = false
+//        dipSpinner.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
+//        dipSpinner.bottomAnchor.constraint(equalTo: dipView.bottomAnchor, constant: -10).isActive = true
 
-        let dipSpinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        dipSpinner.startAnimating()
-        dipView.addSubview(dipSpinner)
-        dipSpinner.translatesAutoresizingMaskIntoConstraints = false
-        dipSpinner.centerXAnchor.constraint(equalTo: dipView.centerXAnchor).isActive = true
-        dipSpinner.bottomAnchor.constraint(equalTo: dipView.bottomAnchor, constant: -10).isActive = true
+        self.dipView.alpha = 0.0
+        self.dispProgressLabel.text = ""
 
-        dipView.alpha = 0.0
-        
         newSetTableView.isEditing = true
         
      //   self.newSetNav.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -353,6 +358,9 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
                                     //                            print("Download complete: \(response!)")
                                     print("Download of \(fileName) complete.")
                                     self.downloadCount += 1
+                                    DispatchQueue.main.async {
+                                        self.dispProgressLabel.text = "\(self.downloadCount) of \(self.downloadTotal)"
+                                    }
                                     if self.downloadCount == self.downloadTotal {
                                         DispatchQueue.main.async {
                                             self.dipView.alpha = 0.0

@@ -8,7 +8,6 @@
 
 //TODO:
 // 1. Activity indicator during attachment downloads
-// 2. Cloud download symbol indicating attachemnt will be downloaded instead of using blue background color
 
 import UIKit
 import AeroGearHttp

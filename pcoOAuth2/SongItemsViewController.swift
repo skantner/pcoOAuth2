@@ -578,14 +578,20 @@ class SongItemsViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewSetCell", for:indexPath)
 
         let label = cell.viewWithTag(1000) as! UILabel
+        let cellimage = cell.viewWithTag(1001) as! UIImageView
+
+        cellimage.image = nil
         
         let setItem = self.newSetList[indexPath.row]
         
         label.text = setItem.title
-
+        label.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        
         if setItem.isPCODownload {
-            cell.backgroundColor = GlobalVariables.pcoBlue
-            label.textColor = .white
+            cell.backgroundColor = .white
+            let img = UIImage(named: "cloud_dl")
+            cellimage.image = img
+            label.textColor = .black
         } else if setItem.isNPLocalSong {
             cell.backgroundColor = GlobalVariables.npGreen
             label.textColor = .white
